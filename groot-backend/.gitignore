@@ -1,0 +1,8 @@
+__pycache__/
+
+.sqlite3
+
+media/
+static/
+server_logs/
+reverse_proxy_logs/

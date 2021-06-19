@@ -1,0 +1,26 @@
+# This is a demo of how the actual config.yml file would look like
+
+SECRET_KEY: ""
+
+DEBUG: ""
+
+DATABASE:
+    ENGINE: "django.db.backends.mysql"
+    NAME: ""
+    USER: ""
+    PASSWORD: ""
+    HOST: ''
+    PORT: 
+
+
+ALLOWED_HOSTS:
+    - ""
+    - ""
+
+
+CORS_ALLOWED_ORIGINS:
+    - ""
+
+CHANNEL_LAYER:
+    HOST: ''
+    PORT: ''
