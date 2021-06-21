@@ -1,6 +1,9 @@
 # pull an official base image from docker-hub
 FROM python:3.9.5-alpine
 
+# add maintainer label (meta-data)
+LABEL maintainer="Ayushman Tripathy <https://github.com/ayushmantripathy9>"
+
 # setup the environment variables 
 ## To stop buffering of logs and printing them as they come
 ENV PYTHONUNBUFFERED 1 

@@ -1,6 +1,9 @@
 # pull an official base image from docker-hub
 FROM node:14.17-alpine
 
+# add maintainer label (meta-data)
+LABEL maintainer="Ayushman Tripathy <https://github.com/ayushmantripathy9>"
+
 # set the working directory to the root of the filesystem
 WORKDIR /
 

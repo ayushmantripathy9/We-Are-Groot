@@ -49,6 +49,7 @@ services:
         command: sh -c "yarn start"
         volumes: 
             - ./groot-frontend/groot/:/groot/
+            - ./groot-frontend/groot/node_modules/:/groot/node_modules/
         expose:
             - 3000
         ports: 
