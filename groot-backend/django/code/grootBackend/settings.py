@@ -136,6 +136,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # The admin site for the project
 ADMIN_SITE_URL = 'admin/'
 
+# The auth user model for the project
+AUTH_USER_MODEL = 'groot.User'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
