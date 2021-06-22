@@ -4,6 +4,7 @@ import './index.css';
 import App from './components/App';
 
 import axios from 'axios'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // redux
 import { createStore, applyMiddleware } from 'redux'
@@ -21,13 +22,15 @@ const store = createStore(reducers, applyMiddleware(thunk))
 
 ReactDOM.render(
 
-  <Provider store = {store} >
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Provider>,
+    <Provider store={store} >
+        <React.StrictMode>
+            <Router>
+                <Route path='/' component={App} />
+            </Router>
+        </React.StrictMode>
+    </Provider>,
 
-  document.getElementById('root')
+    document.getElementById('root')
 
 );
 

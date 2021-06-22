@@ -1,7 +1,7 @@
-function Home () {
+function Home() {
     return (
         <div>
-            <i>I Am Groot</i>
+            <i>Groot's Home</i>
         </div>
     );
 }
