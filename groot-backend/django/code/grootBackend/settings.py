@@ -66,6 +66,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # cors
+    'corsheaders.middleware.CorsMiddleware',
+    
     # default
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -75,8 +78,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # cors
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'grootBackend.urls'
