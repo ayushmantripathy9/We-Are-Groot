@@ -32,6 +32,16 @@ COPY ./requirements.txt ./requirements.txt
 # install all required dependencies for backend in the filesystem
 RUN pip install -r requirements.txt
 
+# make a static folder for serving static files
+RUN mkdir -p /static \
+    && chown -R django:django /static \
+    && chmod -R o+r /static
+
+# make a media folder for serving media files
+RUN mkdir -p /media \
+    && chown -R django:django /media \
+    && chmod -R o+r /media
+
 # free-up the disk space
 RUN apk del .build-deps python3-dev musl-dev gcc zlib-dev openssl-dev
 RUN rm -Rf ~/.cache

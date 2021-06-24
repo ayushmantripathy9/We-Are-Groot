@@ -4,7 +4,3 @@ env/
 
 .vscode/
 .idea/
-
-.dockerignore
-
-
