@@ -37,6 +37,13 @@ export const apiLogout = () => {
     return `${apiHome()}auth/logout/`
 }
 
+export const apiRoomCreate = () => {
+    return `${apiHome()}room/`
+}
+
+export const apiRoomJoin = () => {
+    return `${apiHome()}room/join/`
+}
 
 
 // ... Backend API URLs --> WS  ... //

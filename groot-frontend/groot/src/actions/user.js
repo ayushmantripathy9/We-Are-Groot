@@ -66,10 +66,10 @@ export const verifyLoggedIn = () => {
 export const userLogin = (provider, auth_code) => {
     return dispatch => {
         
-        var loginRedirect = (provider === 'google') ? apiGoogleLogin() : apiGihubLogin();
+        var apiLogin = (provider === 'google') ? apiGoogleLogin() : apiGihubLogin();
         
         axios({
-            url: loginRedirect,
+            url: apiLogin,
             method: 'post',
             data: {
                 'auth_code': auth_code
