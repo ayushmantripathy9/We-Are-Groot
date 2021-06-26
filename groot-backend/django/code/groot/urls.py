@@ -11,7 +11,8 @@ router = routers.SimpleRouter()
 
 # here the urls of the backend are mapped to various viewsets
 
-router.register(r'auth', AuthViewSet)
+router.register(r'auth', AuthViewSet, basename="auth")
+router.register(r'room', RoomViewSet, basename="room")
 
 urlpatterns = []
 urlpatterns += router.urls

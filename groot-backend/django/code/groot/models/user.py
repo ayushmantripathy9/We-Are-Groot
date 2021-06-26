@@ -27,5 +27,5 @@ class User(AbstractUser):
     )
 
     def __str__(self):
-        return f"User-> name = {self.name}, username = {self.username}"
+        return f"User:: name : {self.name}"
     

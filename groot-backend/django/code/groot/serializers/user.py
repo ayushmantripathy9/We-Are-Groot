@@ -12,6 +12,7 @@ class UserGetSerializer(ModelSerializer):
             'id',
             'name',
             'profile_pic',
+            'username',
             'email'
         ]
 
@@ -19,6 +20,7 @@ class UserGetSerializer(ModelSerializer):
             'id',
             'name',
             'profile_pic',
+            'username',
             'email'            
         ]
 

@@ -230,8 +230,7 @@ class AuthViewSet(viewsets.ModelViewSet):
                     """
                         Login the user into the backend if it already exists
                         Then send user-details to the frontend
-                    """      
-                    print("User: ",user_data)              
+                    """                
                     user = User.objects.get(username=user_data['login'])
                     login(request, user)
 
