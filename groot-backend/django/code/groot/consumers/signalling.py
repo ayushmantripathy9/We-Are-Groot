@@ -29,6 +29,13 @@ class SignallingConsumer(WebsocketConsumer):
 
             self.accept()
 
+            message_data = {
+                'type': signalling_events.CALL_CONNECTED,
+                'data': UserGetSerializer(room.participants.all(), many=True).data
+            }
+
+            self.send(text_data=json.dumps(message_data))
+
         except Room.DoesNotExist:
             print("No such room exists")
             self.close()
@@ -40,11 +47,12 @@ class SignallingConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+        self.close()
 
     def receive(self, text_data):
         received_data = json.loads(text_data)
         type = received_data.get('type')
-        data = received_data.get('data')
+        data = received_data.get('message')
 
         if not type or not data:
             return
