@@ -1,0 +1,9 @@
+ICE_CANDIDATES = 'ICE_CANDIDATES'
+OFFER = 'OFFER'
+ANSWER = 'ANSWER'
+
+specific_user_messages = [
+    ICE_CANDIDATES,
+    OFFER,
+    ANSWER
+]
