@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react"
-import { connect, useDispatch, useSelector } from "react-redux"
+
+import { connect, useDispatch } from "react-redux"
 import { addNewParticipant, initializePartipantsList } from "../../actions/room"
-import { apiWSRoom, routeHome } from "../../urls"
+
+import { apiWSRoom } from "../../urls"
+
+import { 
+    ROOM_PARTICIPANTS, 
+    USER_JOINED, 
+    USER_LEFT 
+} from "./messageTypes/room"
+
 import VideoCall from "./videoCall"
 
 
@@ -31,14 +40,14 @@ function Room(props) {
 
         // make these as variables
         switch (type) {
-            case "USER_JOINED":
+            case USER_JOINED:
                 if(data.id !== props.UserInfo.data.id){
                     dispatch(addNewParticipant(data))
                 }
                 
                 break
 
-            case "ROOM_PARTICIPANTS":
+            case ROOM_PARTICIPANTS:
                 let participants = handleParticipantsList(data)
                 
                 dispatch(initializePartipantsList(participants))
@@ -48,7 +57,7 @@ function Room(props) {
                 
             // update this case for user leaving a meeting
             // write a dispatch method to remove user from RoomInfo
-            case "USER_LEFT":
+            case USER_LEFT:
                 break
 
             default:
@@ -70,11 +79,6 @@ function Room(props) {
 
         return room_participants
     }
-
-    function createPeer(userId, stream) {
-
-    }
-
 
 
     return (

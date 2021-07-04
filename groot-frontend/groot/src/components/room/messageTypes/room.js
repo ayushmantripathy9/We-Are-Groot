@@ -1,0 +1,3 @@
+export const USER_JOINED = 'USER_JOINED'
+export const ROOM_PARTICIPANTS = 'ROOM_PARTICIPANTS'
+export const USER_LEFT = 'USER_LEFT'

@@ -29,7 +29,6 @@ class RoomConsumer(WebsocketConsumer):
             self.accept()
 
             room_participants = UserGetSerializer(room.participants.all(), many=True).data
-            print("Participants of the room: ",room_participants)
 
             message_data = {
                 'type': room_events.ROOM_PARTICIPANTS,
@@ -42,7 +41,6 @@ class RoomConsumer(WebsocketConsumer):
                 'type': room_events.USER_JOINED,
                 'data': UserGetSerializer(self.user).data
             }
-            print(message_data)
 
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -59,7 +57,7 @@ class RoomConsumer(WebsocketConsumer):
     def disconnect(self, code):
         message_data = {
             'type': room_events.USER_LEFT,
-            'data': UserGetSerializer(self.user)
+            'data': UserGetSerializer(self.user).data
         }
 
         async_to_sync(self.channel_layer.group_send)(
@@ -75,10 +73,12 @@ class RoomConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+        self.close()
+        
     def receive(self, text_data):
         received_data = json.loads(text_data)
         type = received_data.get('type')
-        data = received_data.get('data')
+        data = received_data.get('message')
 
         message_data = {
             'type': type,
