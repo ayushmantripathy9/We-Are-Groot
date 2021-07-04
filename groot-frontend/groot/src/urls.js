@@ -54,11 +54,14 @@ export const apiWSHome = () => {
     return "ws://localhost:60000/ws/"
 }
 
-// ... URL for user joining a room for call ... //
-export const apiWSCall = (room_code) => {
-    return `${apiWSHome()}rooms/${room_code}/call/`
+// ... URLs for user joining a room for call ... //
+export const apiWSRoom = (room_code) => {
+    return `${apiWSHome()}rooms/${room_code}/room/`
 }
 
+export const apiWSCall = (room_code) => {
+    return `${apiWSHome()}rooms/${room_code}/room/signalling/`
+}
 
 
 // ... OAuth URLs ... //

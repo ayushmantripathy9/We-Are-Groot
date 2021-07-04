@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { verifyLoggedIn } from '../actions/user';
 import VerifyLogin from './auth/verifyLogin';
 import Login from './auth/login';
+import Room from './room';
 
 
 
 
-function App() {
+function App(props) {
     const UserInfo = useSelector(state => state.userInfo)
     const dispatch = useDispatch()
 
@@ -48,10 +49,16 @@ function App() {
 
                     <Route
                         exact
-                        path=''
+                        path={`${props.match.path}`}
                         component={Home}
                     />
 
+                    <Route
+                        exact
+                        path={`${props.match.path}room/:room_code/`}
+                        component={Room}
+                    />
+                    
                     <Redirect to='' />
 
                 </Switch>

@@ -4,6 +4,7 @@ import { apiRoomCreate, apiRoomJoin } from '../urls'
 
 import { 
     INITIALIZE_ROOM, 
+    INITILIAZE_PARTICIPANTS, 
     UPDATE_PARTICIPANTS 
 } from './types'
 
@@ -25,7 +26,9 @@ export const createRoom = (room_name) => {
                 payload: {
                     loaded: true,
                     error: 0,
-                    ...room_data
+                    room_name: room_data.room_name,
+                    room_code: room_data.room_code,
+                    start_time: room_data.start_time
                 }
             })
         }).catch(error => {
@@ -51,7 +54,9 @@ export const joinRoom = (room_code) => {
                 payload: {
                     loaded: true,
                     error: response.data.error,
-                    ...room_data
+                    room_name: room_data.room_name,
+                    room_code: room_data.room_code,
+                    start_time: room_data.start_time
                 }
             })            
         }).catch(error => {
@@ -61,3 +66,25 @@ export const joinRoom = (room_code) => {
     }
 }
 
+
+export const initializePartipantsList = (participants) => {
+    return dispatch => {
+        dispatch({
+            type: INITILIAZE_PARTICIPANTS,
+            payload:{
+                participants: participants
+            }
+        })
+    }
+}
+
+export const addNewParticipant = (participant) => {
+    return dispatch => {
+        dispatch({
+            type: UPDATE_PARTICIPANTS,
+            payload: {
+                newParticipant: participant
+            }
+        })
+    }
+}
