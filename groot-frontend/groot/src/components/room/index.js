@@ -58,6 +58,7 @@ function Room(props) {
             // update this case for user leaving a meeting
             // write a dispatch method to remove user from RoomInfo
             case USER_LEFT:
+                console.log("User Left: ",data)
                 break
 
             default:
