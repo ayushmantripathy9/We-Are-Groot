@@ -2,22 +2,27 @@ import { useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 import { apiWSCall, routeHome } from "../../urls"
 
-import { 
-    ANSWER, 
-    CALL_CONNECTED, 
-    ICE_CANDIDATE, 
-    OFFER 
+import {
+    ANSWER,
+    CALL_CONNECTED,
+    ICE_CANDIDATE,
+    OFFER
 } from "./messageTypes/signalling"
+
+import Videos from "./videos"
+
+
+let peerConnections = {}
 
 function VideoCall(props) {
 
     const UserData = props.UserInfo.data
-    const userRef = useRef()    // user video
+    // const userRef = useRef()    // user video
     const [audioState, setAudioState] = useState(false)
     const [videoState, setVideoState] = useState(false)
 
-    const peerConnections = {}
     const [videoStreams, setVideoStreams] = useState({})    // would contain all the video streams of all users 
+    const [streamSent, setStreamSent] = useState({})
 
     const callWebSocket = useRef()
 
@@ -30,19 +35,62 @@ function VideoCall(props) {
     }, [])
 
     useEffect(() => {
+        console.log(audioState, videoState)
         if (videoState === true || audioState === true) {
             navigator.mediaDevices.getUserMedia({ video: videoState ? true : false, audio: audioState }).then(stream => {
-                userRef.current.srcObject = stream
+
+                const tracks = stream.getTracks()
+                console.log("Tracks :", tracks)
+                let my_stream = videoStreams[UserData.id]
+                if (!my_stream)
+                    my_stream = new MediaStream()
+
+                my_stream.addTrack(tracks[0])
+                setVideoStreams({
+                    ...videoStreams,
+                    [UserData.id]: my_stream
+                })
+
+                Object.keys(peerConnections).forEach(id => {
+                    if (id === UserData.id)
+                        return
+                    console.log("Adding media track for user ", id)
+
+                    if (!streamSent[id]) {
+                        setStreamSent({
+                            ...streamSent,
+                            [id]: peerConnections[id].addTrack(tracks[0], stream)
+                        })
+                    }
+                })
+                console.log("PC ", peerConnections)
             })
         }
         else {
-            if (userRef.current.srcObject) {
-                userRef.current.srcObject.getTracks().forEach(track => {
+
+            let my_stream = videoStreams[UserData.id]
+            console.log("Hello There ", my_stream)
+            if (my_stream) {
+                Object.keys(peerConnections).forEach(id => {
+                    if (id == UserData.id)
+                        return
+                    peerConnections[id].removeTrack(streamSent[id])
+                    setStreamSent({
+                        ...streamSent,
+                        [id]: null
+                    })
+                })
+                console.log("Hello Track Incoming")
+                my_stream.getTracks().forEach(track => {
                     track.stop()
+                    my_stream.removeTrack(track)
                 })
             }
+            setVideoStreams({
+                ...videoStreams,
+                [UserData.id]: my_stream
+            })
 
-            userRef.current.srcObject = null
         }
     }, [audioState, videoState])
 
@@ -104,13 +152,14 @@ function VideoCall(props) {
             offerToReceiveAudio: 1,
             offerToReceiveVideo: 1,
         }
-
+        console.log("My Peers: ", peers)
         peers.forEach(peer => {
             if (peer.id === UserData.id)
                 return
 
             peerConnections[peer.id] = createPeer(peer.id)
-
+            console.log("new peer connection established with: ", peer.id)
+            console.log("PC :", peerConnections)
             peerConnections[peer.id]
                 .createOffer(offerRequests)
                 .then(offer => {
@@ -178,6 +227,7 @@ function VideoCall(props) {
                 participantStream = new MediaStream()
 
             participantStream.addTrack(event.track)
+            console.log("received track from other user, ", targetID)
 
             setVideoStreams({
                 ...videoStreams,
@@ -212,7 +262,7 @@ function VideoCall(props) {
 
     //      END OF FUNCTIONS FOR CREATING PEER CONNECTIONS      //
 
-    
+
     //      FUNCTIONS FOR HANDLING RTC SIGNALLING EVENTS        //
 
     function handleOfferMessage(message) {
@@ -222,7 +272,7 @@ function VideoCall(props) {
             return
 
         const description = new RTCSessionDescription(sdp)
-        
+
         if (!peerConnections[senderID])
             peerConnections[senderID] = createPeer(senderID)
 
@@ -287,8 +337,6 @@ function VideoCall(props) {
 
     return (
         <div>
-            My Video
-            <br />
             <button
                 onClick={toggleAudio}
             >
@@ -305,14 +353,10 @@ function VideoCall(props) {
                 Leave Room
             </button>
             <br />
-            <video
-                muted
-                autoPlay
-                ref={userRef}
-            />
             <br />
-            Participants Videos
+            Videos
             <br />
+            <Videos videoStreams={videoStreams} />
 
         </div>
     )

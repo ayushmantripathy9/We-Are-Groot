@@ -30,10 +30,6 @@ function Room(props) {
     }, [])
 
 
-    useEffect(()=>{
-        console.log("New Room Info: ",props.RoomInfo)
-    },[props])
-
     function handleWebSocketMessage(message) {
         const data = message.data
         const type = message.type
