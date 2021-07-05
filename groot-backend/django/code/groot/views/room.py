@@ -78,8 +78,9 @@ class RoomViewSet(viewsets.ModelViewSet):
                     {
                         'message': "User already present in the room.",
                         'room_info': room_details,
-                        'error': 3
+                        'error': 0
                     },
+                    status=status.HTTP_200_OK
                 )
             else:
                 room.participants.add(user)
@@ -105,7 +106,6 @@ class RoomViewSet(viewsets.ModelViewSet):
             )        
 
     # in joining response, 
-    # error:    0 => no error 
+    # error:    0 => no error,  user is already present in the room
     #           1 => room_code not present in request
     #           2 => room with such a room_code is not present
-    #           3 => user is already present in the room

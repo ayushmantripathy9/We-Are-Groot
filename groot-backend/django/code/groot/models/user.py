@@ -27,5 +27,5 @@ class User(AbstractUser):
     )
 
     def __str__(self):
-        return f"User:: name : {self.name}"
+        return f"{self.name}, username: {self.username}"
     

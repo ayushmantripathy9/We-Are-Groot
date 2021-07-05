@@ -39,4 +39,4 @@ class Room(models.Model):
     )
 
     def __str__(self) :
-        return f"Room :: name : {self.room_name}, code : {self.room_code}"
+        return f"{self.room_name}, code : {self.room_code}"
