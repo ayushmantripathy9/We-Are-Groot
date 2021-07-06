@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 
-import { 
-    Grid, 
+import {
+    Grid,
     makeStyles,
     Card,
     CardMedia,
@@ -13,77 +13,72 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
-    card:{
+    card: {
         maxWidth: 345,
     },
     media: {
-        height: 140,
+        height: 175,
     },
 }))
 
 
 function Videos(props) {
     const classes = useStyles();
-    const[videoPresent,setVideoPresent] = useState(false)
+
     useEffect(() => {
-        Object.keys(props.videoStreams).forEach(id => {
-            if(props.videoStreams[id]) {
+        Object.keys(props.userStreams).forEach(id => {
+            if (props.userStreams[id]) {
                 const videoElement = document.getElementById(`video-${id}`)
-                const tracks = props.videoStreams[id].getTracks()
-                if(tracks.length > 0 && !!videoElement){
-                    videoElement.srcObject = props.videoStreams[id]
-                    
+                const tracks = props.userStreams[id].getTracks()
+
+                if (tracks.length > 0 && !!videoElement) {
+                    videoElement.srcObject = props.userStreams[id]
                 }
-                setVideoPresent(true)
             }
         })
 
-        console.log(props.videoStreams)
-    }, [props.videoStreams])
+    }, [props.userStreams])
 
-    if(videoPresent){
-        return(
-            <div className={classes.root}>
 
-                <Grid container spacing={3}>
-                    {
-                        Object.keys(props.videoStreams).map(id => {
-                            return(
+    return (
+        <div className={classes.root}>
 
-                                <div>
+            <Grid container spacing={3}>
+                {
+                    Object.keys(props.RoomInfo.participants).map(id => {
+                        return (
+
+                            <div>
+                                <Grid item xs>
                                     <Card className={classes.card}>
+                                        
                                         <CardContent>
                                             {props.RoomInfo.participants[id].name}
                                         </CardContent>
+                                        
                                         <CardMedia
-                                            component='video' 
-                                            muted={id === props.UserInfo.data.id}
+                                            component='video'
+                                            muted={id===props.UserInfo.data.id}
                                             className={classes.media}
                                             autoPlay
                                             id={`video-${id}`}
                                         />
 
                                     </Card>
-                                </div>
-                                
-                            )
-                        })
-                    }
+                                </Grid>
+                            </div>
+
+                        )
+                    })
+                }
 
 
-                </Grid>
+            </Grid>
 
-            </div>
-        )
-    }
-    else{
-        return (
-            <div>
-                No Turned On Videos
+        </div>
+    )
 
-            </div>
-        )
-    }
+
 }
 
 
