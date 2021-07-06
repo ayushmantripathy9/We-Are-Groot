@@ -12,16 +12,15 @@ import {
 import Videos from "./videos"
 
 
-let peerConnections = {}
-let videoStreamSent = {}
-let audioStreamSent = {}
-
 function VideoCall(props) {
 
     const UserData = props.UserInfo.data
-    // const userRef = useRef()    // user video
     const [audioState, setAudioState] = useState(false)
     const [videoState, setVideoState] = useState(false)
+
+    const peerConnections = useRef({})  // all the peer-connections for sharing video and audio to all users
+    const videoStreamSent = useRef({})
+    const audioStreamSent = useRef({})
 
     const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users 
 
@@ -40,12 +39,12 @@ function VideoCall(props) {
             let my_stream = userStreams[UserData.id]
 
             if (my_stream) {
-                Object.keys(peerConnections).forEach(id => {
+                Object.keys(peerConnections.current).forEach(id => {
                     if (id === UserData.id)
                         return
 
-                    peerConnections[id].removeTrack(audioStreamSent[id])
-                    audioStreamSent[id] = null
+                    peerConnections.current[id].removeTrack(audioStreamSent.current[id])
+                    audioStreamSent.current[id] = null
 
                 })
 
@@ -53,9 +52,9 @@ function VideoCall(props) {
                     audioTrack.stop()
                     my_stream.removeTrack(audioTrack)
                 })
-                
+
             }
-            
+
             setUserStreams({
                 ...userStreams,
                 [UserData.id]: my_stream
@@ -69,25 +68,25 @@ function VideoCall(props) {
                 my_stream = new MediaStream()
 
             navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
+                .then(stream => {
 
-                const audioStreamTracks = stream.getAudioTracks()
-                my_stream.addTrack(audioStreamTracks[0])
+                    const audioStreamTracks = stream.getAudioTracks()
+                    my_stream.addTrack(audioStreamTracks[0])
 
-                Object.keys(peerConnections).forEach(id => {
-                    if (id === UserData.id)
-                        return
+                    Object.keys(peerConnections.current).forEach(id => {
+                        if (id === UserData.id)
+                            return
 
-                    if (!audioStreamSent[id])
-                        audioStreamSent[id] = peerConnections[id].addTrack(audioStreamTracks[0], stream)
+                        if (!audioStreamSent.current[id])
+                            audioStreamSent.current[id] = peerConnections.current[id].addTrack(audioStreamTracks[0], stream)
+                    })
+
+                    setUserStreams({
+                        ...userStreams,
+                        [UserData.id]: my_stream
+                    })
+                    setAudioState(true)
                 })
-
-                setUserStreams({
-                    ...userStreams,
-                    [UserData.id]: my_stream
-                })
-                setAudioState(true)
-            })
         }
     }
 
@@ -95,25 +94,25 @@ function VideoCall(props) {
         if (videoState) {
             let my_stream = userStreams[UserData.id]
             if (my_stream) {
-                
-                Object.keys(peerConnections).forEach(id => {
+
+                Object.keys(peerConnections.current).forEach(id => {
                     if (id === UserData.id)
                         return
-                    
-                    if (videoStreamSent[id])
-                        peerConnections[id].removeTrack(videoStreamSent[id])
-                    
-                    videoStreamSent[id] = null
-                    
+
+                    if (videoStreamSent.current[id])
+                        peerConnections.current[id].removeTrack(videoStreamSent.current[id])
+
+                    videoStreamSent.current[id] = null
+
                 })
-                
+
                 my_stream.getVideoTracks().forEach(videoTrack => {
                     videoTrack.stop()
                     my_stream.removeTrack(videoTrack)
                 })
-                
+
             }
-            
+
             setUserStreams({
                 ...userStreams,
                 [UserData.id]: my_stream
@@ -127,25 +126,25 @@ function VideoCall(props) {
                 my_stream = new MediaStream()
 
             navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
+                .then(stream => {
 
-                const videoStreamTracks = stream.getVideoTracks()
-                my_stream.addTrack(videoStreamTracks[0])
+                    const videoStreamTracks = stream.getVideoTracks()
+                    my_stream.addTrack(videoStreamTracks[0])
 
-                Object.keys(peerConnections).forEach(id => {
-                    if (id === UserData.id)
-                        return
+                    Object.keys(peerConnections.current).forEach(id => {
+                        if (id === UserData.id)
+                            return
 
-                    if (!videoStreamSent[id])
-                        videoStreamSent[id] = peerConnections[id].addTrack(videoStreamTracks[0], stream)
+                        if (!videoStreamSent.current[id])
+                            videoStreamSent.current[id] = peerConnections.current[id].addTrack(videoStreamTracks[0], stream)
+                    })
+
+                    setUserStreams({
+                        ...userStreams,
+                        [UserData.id]: my_stream
+                    })
+                    setVideoState(true)
                 })
-                
-                setUserStreams({
-                    ...userStreams,
-                    [UserData.id]: my_stream
-                })
-                setVideoState(true)
-            })
         }
     }
 
@@ -180,6 +179,7 @@ function VideoCall(props) {
     }
 
     //  WebRTC RELATED CONSTANTS AND FUNCTIONS  //
+
     const iceServers = [
 
         {
@@ -197,6 +197,17 @@ function VideoCall(props) {
         {
             urls: 'stun:stun4.l.google.com:19302'
         },
+        {
+            url: 'turn:numb.viagenie.ca',
+            credential: 'muazkh',
+            username: 'webrtc@live.com'
+        },
+        {
+            url: 'turn:192.158.29.39:3478?transport=tcp',
+            credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+            username: '28224511:1379330808'
+        }
+
     ]
 
     function callPeers(peers) {
@@ -204,33 +215,33 @@ function VideoCall(props) {
             offerToReceiveAudio: 1,
             offerToReceiveVideo: 1,
         }
-        console.log("Call Peers was initiated")
+
         peers.forEach(peer => {
             if (peer.id === UserData.id)
                 return
-            
-            if(!peerConnections[peer.id]){
-                peerConnections[peer.id] = createPeer(peer.id)
 
-                peerConnections[peer.id]
-                    .createOffer(offerRequests)
-                    .then(offer => {
-                        return peerConnections[peer.id].setLocalDescription(offer)
+            if (!peerConnections.current[peer.id])
+                peerConnections.current[peer.id] = createPeer(peer.id)
+
+            peerConnections.current[peer.id]
+                .createOffer(offerRequests)
+                .then(offer => {
+                    return peerConnections.current[peer.id].setLocalDescription(offer)
+                })
+                .then(() => {
+                    sendWebSocketMessage({
+                        type: "OFFER",
+                        message: {
+                            targetID: peer.id,
+                            senderID: UserData.id,
+                            sdp: peerConnections.current[peer.id].localDescription
+                        }
                     })
-                    .then(() => {
-                        sendWebSocketMessage({
-                            type: "OFFER",
-                            message: {
-                                targetID: peer.id,
-                                senderID: UserData.id,
-                                sdp: peerConnections[peer.id].localDescription
-                            }
-                        })
-                    })
-                    .catch(error => {
-                        console.log("Error occurred while calling peer :", peer.id, "\n Error : ", error)
-                    })
-            }
+                })
+                .catch(error => {
+                    console.log("Error occurred while calling peer :", peer.id, "\n Error : ", error)
+                })
+
         })
     }
 
@@ -325,32 +336,32 @@ function VideoCall(props) {
 
         const description = new RTCSessionDescription(sdp)
 
-        if (!peerConnections[senderID])
-            peerConnections[senderID] = createPeer(senderID)
+        if (!peerConnections.current[senderID])
+            peerConnections.current[senderID] = createPeer(senderID)
 
-        peerConnections[senderID]
+        peerConnections.current[senderID]
             .setRemoteDescription(description)
             .then(() => {
                 if (userStreams[UserData.id]) {
-                    if (!audioStreamSent[senderID]) {
+                    if (!audioStreamSent.current[senderID]) {
                         const audioStreamTracks = userStreams[UserData.id].getAudioTracks()
                         if (audioStreamTracks.length > 0)
-                            audioStreamSent[senderID] = peerConnections[senderID].addTrack(audioStreamTracks[0], userStreams[UserData.id])
+                            audioStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(audioStreamTracks[0], userStreams[UserData.id])
                     }
 
-                    if (!videoStreamSent[senderID]) {
+                    if (!videoStreamSent.current[senderID]) {
                         const videoStreamTracks = userStreams[UserData.id].getVideoTracks()
-                        if (videoStreamTracks.length > 0){
-                            videoStreamSent[senderID] = peerConnections[senderID].addTrack(videoStreamTracks[0], userStreams[UserData.id])
+                        if (videoStreamTracks.length > 0) {
+                            videoStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(videoStreamTracks[0], userStreams[UserData.id])
                         }
                     }
                 }
             })
             .then(() => {
-                return peerConnections[senderID].createAnswer()
+                return peerConnections.current[senderID].createAnswer()
             })
             .then(answer => {
-                return peerConnections[senderID].setLocalDescription(answer)
+                return peerConnections.current[senderID].setLocalDescription(answer)
             })
             .then(() => {
                 sendWebSocketMessage({
@@ -358,7 +369,7 @@ function VideoCall(props) {
                     message: {
                         targetID: senderID,
                         senderID: UserData.id,
-                        sdp: peerConnections[senderID].localDescription
+                        sdp: peerConnections.current[senderID].localDescription
                     }
                 })
             })
@@ -372,7 +383,7 @@ function VideoCall(props) {
 
         const description = new RTCSessionDescription(sdp)
 
-        peerConnections[senderID]
+        peerConnections.current[senderID]
             .setRemoteDescription(description)
             .then(() => { })
             .catch(() => { })
@@ -384,7 +395,7 @@ function VideoCall(props) {
 
         const ice_candidiate = new RTCIceCandidate(message.candidate)
 
-        peerConnections[message.senderID]
+        peerConnections.current[message.senderID]
             .addIceCandidate(ice_candidiate)
             .then(() => { })
     }
