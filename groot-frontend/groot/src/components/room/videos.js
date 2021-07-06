@@ -26,7 +26,7 @@ function Videos(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        Object.keys(props.userStreams).forEach(id => {
+        Object.keys(props.RoomInfo.participants).forEach(id => {
             if (props.userStreams[id]) {
                 const videoElement = document.getElementById(`video-${id}`)
                 const tracks = props.userStreams[id].getTracks()
