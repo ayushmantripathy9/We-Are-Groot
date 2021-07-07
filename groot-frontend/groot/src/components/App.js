@@ -1,94 +1,31 @@
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
-import Home from "./home";
+import { BrowserRouter as Router } from "react-router-dom"
 
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { verifyLoggedIn } from '../actions/user';
-import VerifyLogin from './auth/verifyLogin';
-import Login from './auth/login';
-import Room from './room';
-
+import Routing from "./Routing";
+import NavBarTop from "./nav"
+import { useSelector } from "react-redux";
 
 
 
 function App(props) {
-    const UserInfo = useSelector(state => state.userInfo)
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (UserInfo.hasLoaded === false) {
-            const loc = window.location.pathname.split('/')
-            if (loc[0] !== 'redirect') {
-                dispatch(verifyLoggedIn())
+    const theme =
+        createMuiTheme({
+            palette: {
+                type: 'dark'
             }
-        }
-    },[])
+        })
 
-    if (UserInfo.hasLoaded === false) {
-        return (
-            <Router>
-                <Switch>
-
-                    <Route
-                        exact
-                        path='/redirect'
-                        component={VerifyLogin}
-                    />
-
-                    <Redirect to='' />
-
-                </Switch>
-            </Router>
-        )
-    }
-    else if (UserInfo.login === true) {
-        return (
-            <Router>
-                <Switch>
-
-                    <Route
-                        exact
-                        path={`${props.match.path}`}
-                        component={Home}
-                    />
-
-                    <Route
-                        exact
-                        path={`${props.match.path}room/:room_code/`}
-                        component={Room}
-                    />
-                    
-                    <Redirect to='' />
-
-                </Switch>
-            </Router>
-        )
-    }
-    else if (UserInfo.login === false) {
-        return (
-            <Router>
-                <Switch>
-                    
-                    <Route 
-                        exact
-                        path='/redirect'
-                        component={VerifyLogin}
-                    />
-
-                    <Route 
-                        exact
-                        path=''
-                        component={Login}
-                    />
-
-                    <Redirect to='' />
-
-                </Switch>
-            </Router>
-        )
-    }
+    return (
+        <Router>
+            <ThemeProvider theme={theme}>
+                <NavBarTop />
+                <Routing />
+            </ThemeProvider>
+        </Router>
+    )
 
 }
 
-export default App;
+export default App
