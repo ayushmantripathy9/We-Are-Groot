@@ -34,6 +34,15 @@ function Videos(props) {
                 if (tracks.length > 0 && !!videoElement) {
                     videoElement.srcObject = props.userStreams[id]
                 }
+                else{
+                    console.log("Tracks not found 1 ",props.RoomInfo.participants[id].name)
+                    videoElement.srcObject = null
+                }
+            }
+            else{
+                console.log("Tracks not found 2 ", props.RoomInfo.participants[id].name)
+                const videoElement = document.getElementById(`video-${id}`)
+                videoElement.srcObject = null
             }
         })
 
@@ -52,7 +61,7 @@ function Videos(props) {
                                     <Card className={classes.card}>
 
                                         <CardContent>
-                                            {props.RoomInfo.participants[id].name}
+                                            {props.RoomInfo.participants[id].name},{props.RoomInfo.participants[id].id}
                                         </CardContent>
 
                                         {/* <CardMedia

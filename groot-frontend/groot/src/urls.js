@@ -63,6 +63,10 @@ export const apiWSCall = (room_code) => {
     return `${apiWSHome()}rooms/${room_code}/room/signalling/`
 }
 
+export const apiWSChat = (room_code) => {
+    return `${apiWSHome()}rooms/${room_code}/room/chat/`
+}
+
 
 // ... OAuth URLs ... //
 
