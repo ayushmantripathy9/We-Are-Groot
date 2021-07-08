@@ -61,21 +61,15 @@ function Videos(props) {
                                     <Card className={classes.card}>
 
                                         <CardContent>
-                                            {props.RoomInfo.participants[id].name},{props.RoomInfo.participants[id].id}
+                                            {props.RoomInfo.participants[id].name}
                                         </CardContent>
 
-                                        {/* <CardMedia
-                                            component='video'
-                                            muted={id === props.UserInfo.data.id}
-                                            className={classes.media}
-                                            autoPlay
-                                            id={`video-${id}`}
-                                        /> */}
                                         <video 
                                             id={`video-${id}`}
                                             autoPlay
                                             muted={id === props.UserInfo.data.id}
                                             className={classes.media}
+                                            height="175"
                                         />
 
                                     </Card>
