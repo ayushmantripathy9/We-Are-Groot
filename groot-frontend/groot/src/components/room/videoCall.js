@@ -13,8 +13,8 @@ import {
 
 import Videos from "./videos"
 
-const useStyles = makeStyles((theme)=>({
-    root:{
+const useStyles = makeStyles((theme) => ({
+    root: {
         display: "grid",
         gridTemplateColumns: "4fr 1fr"
     },
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme)=>({
     },
     chat: {
 
-    } 
+    }
 }))
 
 function VideoCall(props) {
@@ -71,9 +71,11 @@ function VideoCall(props) {
 
             }
 
-            setUserStreams({
-                ...userStreams,
-                [UserData.id]: my_stream
+            setUserStreams(currentStreams => {
+                return {
+                    ...currentStreams,
+                    [UserData.id]: my_stream
+                }
             })
             setAudioState(false)
         }
@@ -97,9 +99,11 @@ function VideoCall(props) {
                             audioStreamSent.current[id] = peerConnections.current[id].addTrack(audioStreamTracks[0], stream)
                     })
 
-                    setUserStreams({
-                        ...userStreams,
-                        [UserData.id]: my_stream
+                    setUserStreams(currentStreams => {
+                        return {
+                            ...currentStreams,
+                            [UserData.id]: my_stream
+                        }
                     })
                     setAudioState(true)
                 })
@@ -129,9 +133,11 @@ function VideoCall(props) {
 
             }
 
-            setUserStreams({
-                ...userStreams,
-                [UserData.id]: my_stream
+            setUserStreams(currentStreams => {
+                return {
+                    ...currentStreams,
+                    [UserData.id]: my_stream
+                }
             })
 
             setVideoState(false)
@@ -159,9 +165,11 @@ function VideoCall(props) {
                         }
                     })
 
-                    setUserStreams({
-                        ...userStreams,
-                        [UserData.id]: my_stream
+                    setUserStreams(currentStreams => {
+                        return {
+                            ...currentStreams,
+                            [UserData.id]: my_stream
+                        }
                     })
                     setVideoState(true)
                 })
@@ -312,18 +320,22 @@ function VideoCall(props) {
 
             participantStream.addTrack(event.track)
 
-            setUserStreams({
-                ...userStreams,
-                [targetID]: participantStream
+            setUserStreams(currentStreams => {
+                return {
+                    ...currentStreams,
+                    [targetID]: participantStream
+                }
             })
         }
     }
 
     function handleRemoveStreamEvent(targetID) {
         return event => {
-            setUserStreams({
-                ...userStreams,
-                [targetID]: event.stream
+            setUserStreams(currentStreams => {
+                return {
+                    ...currentStreams,
+                    [targetID]: event.stream
+                }
             })
         }
     }
