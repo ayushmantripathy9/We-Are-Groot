@@ -6,16 +6,14 @@ import { BrowserRouter as Router } from "react-router-dom"
 import Routing from "./Routing";
 import NavBarTop from "./nav"
 import { useSelector } from "react-redux";
-
+import themes from "../themes"
 
 
 function App(props) {
-    const theme =
-        createMuiTheme({
-            palette: {
-                type: 'dark'
-            }
-        })
+    const theme_name = useSelector(state => state.currentTheme.theme_name)
+    const theme = createMuiTheme({
+        palette: themes[theme_name]
+    })
 
     return (
         <Router>

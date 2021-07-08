@@ -20,7 +20,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import GitHubIcon from '@material-ui/icons/GitHub'
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 
-import groot_logo from "./media/groot_final.png"
+import groot_logo from "./media/groot_landing_logo.png"
 
 const handleGithubLogin = () => {
     window.location = githubAuthRedirect(cookie.load('stateToken'))
@@ -33,6 +33,10 @@ const handleGoogleLogin = () => {
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "91.55vh",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingRight: "1.5rem",
+        paddingTop: "1rem",
     },
     illustrationContainer: {
         display: "flex",
@@ -42,24 +46,17 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         display: "flex",
+        height: "98%",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         alignContent: "space-around",
-        padding: "0"
-    },
-    loginContainer: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "space-around",
-        width: "100%"
     },
     card: {
         maxWidth: 345,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "transparent",
     },
 
 
@@ -68,12 +65,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
     const classes = useStyles()
-    const theme =
-        createMuiTheme({
-            palette: {
-                type: 'dark'
-            }
-        })
 
     useEffect(() => {
         cookie.remove('stateToken')
@@ -81,14 +72,13 @@ export default function Login() {
     }, [])
 
     return (
-        <ThemeProvider theme={theme}>
             <div>
                 <Grid container component='main' className={classes.root}>
                     <CssBaseline />
                     <Grid
                         item
-                        xs={false}
-                        sm={false}
+                        xs={12}
+                        sm={12}
                         md={7}
                         className={classes.illustrationContainer}
                     >
@@ -100,8 +90,8 @@ export default function Login() {
                                 image={groot_logo}
                                 title="Groot"
                             />
-                            <CardContent>
-                                Groot says Hello
+                            <CardContent alignItems="center" >
+                                <i>Groot says Hello ...</i>
                             </CardContent>
 
                         </Card>
@@ -116,8 +106,11 @@ export default function Login() {
                         className={classes.paper}
                     >
                         <Grid
-                            item
-                            className={classes.loginContainer}
+                            container
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={3}
                         >
                             <Grid item>
                                 <Button
@@ -132,7 +125,7 @@ export default function Login() {
                             <Grid item>
                                 <Button
                                     variant="contained"
-                                    color="secondary"
+                                    color="primary"
                                     onClick={handleGoogleLogin}
                                     startIcon={<BubbleChartIcon />}
                                 >
@@ -153,6 +146,5 @@ export default function Login() {
 
 
             </div>
-        </ThemeProvider >
     );
 }
