@@ -1,29 +1,44 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import {
+    Paper,
+    Grid,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField
+    TextField,
+    makeStyles,
 } from '@material-ui/core'
+
 import { createRoom, joinRoom } from "../../actions/room";
 import Room from "../room";
 import { routeHome } from "../../urls";
 
-
+const useStyles = makeStyles((theme) => ({
+    root: {
+        height: "100vh"
+    },
+    paper: {
+        height: "100%",
+    }
+}))
 function Home(props) {
     const UserInfo = useSelector(state => state.userInfo)
     const RoomInfo = useSelector(state => state.roomInfo)
+
+    const classes = useStyles()
 
     const [roomName, setRoomName] = useState('')
     const [roomCode, setRoomCode] = useState('')
     const [openCreate, setOpenCreate] = useState(false)
     const [openJoin, setOpenJoin] = useState(false)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
 
@@ -36,7 +51,6 @@ function Home(props) {
         }
     }, [RoomInfo])
 
-    const dispatch = useDispatch()
 
     const handleCreateDialogOpen = () => {
         setOpenCreate(true)
@@ -72,115 +86,112 @@ function Home(props) {
         handleJoinDialogClose()
     }
 
-    // if (RoomInfo.loaded) {
-    //     return (
-    //         <Room />
-    //     )
-    // }
-    // else {
     return (
-        <div>
-            <h2>
-                <i>Groot's Home</i><br />
-            </h2>
-            You are welcome as of now, {UserInfo.data.name}
+        <div className={classes.root}>
+            <Paper
+                className={classes.paper}
+            >
+                <h2>
+                    <i>Groot's Home</i><br />
+                </h2>
+                You are welcome as of now, {UserInfo.data.name}
 
-            <div>
-                <h3>
-                    What Groot <i>knows</i> ;)
-                </h3>
-                <ul>
-                    <li>Username: {UserInfo.data.username} </li>
-                    <li>Name: {UserInfo.data.name}</li>
-                </ul>
-                <img src={UserInfo.data.profile_pic} />
-                <br />
-                <Button
-                    variant="contained"
-                    size="large" color="primary"
-                    onClick={handleCreateDialogOpen}
-                >
-                    Create Room
-                </Button>
+                <div>
+                    <h3>
+                        What Groot <i>knows</i> ;)
+                    </h3>
+                    <ul>
+                        <li>Username: {UserInfo.data.username} </li>
+                        <li>Name: {UserInfo.data.name}</li>
+                    </ul>
+                    <br />
+                    <Button
+                        variant="contained"
+                        size="large" color="primary"
+                        onClick={handleCreateDialogOpen}
+                    >
+                        Create Room
+                    </Button>
 
-                <Dialog
-                    open={openCreate}
-                    onClose={handleCreateDialogClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title" >
-                        Create New Room
-                    </DialogTitle>
-                    <DialogContent>
+                    <Dialog
+                        open={openCreate}
+                        onClose={handleCreateDialogClose}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="form-dialog-title" >
+                            Create New Room
+                        </DialogTitle>
+                        <DialogContent>
 
-                        <DialogContentText>
-                            Enter a name for your room:
-                        </DialogContentText>
+                            <DialogContentText>
+                                Enter a name for your room:
+                            </DialogContentText>
 
-                        <TextField
-                            auroFocus
-                            margin="dense"
-                            id="dialog-text"
-                            type="text"
-                            fullWidth
-                            value={roomName}
-                            onChange={handleRoomNameChange}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCreateDialogClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleRoomCreate} color="primary">
-                            Continue
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                            <TextField
+                                auroFocus
+                                margin="dense"
+                                id="dialog-text"
+                                type="text"
+                                fullWidth
+                                value={roomName}
+                                onChange={handleRoomNameChange}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCreateDialogClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={handleRoomCreate} color="primary">
+                                Continue
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
 
 
-                <Button
-                    variant="contained"
-                    size="large" color="primary"
-                    onClick={handleJoinDialogOpen}
-                >
-                    Join Room
-                </Button>
+                    <Button
+                        variant="contained"
+                        size="large" color="primary"
+                        onClick={handleJoinDialogOpen}
+                    >
+                        Join Room
+                    </Button>
 
-                <Dialog
-                    open={openJoin}
-                    onClose={handleJoinDialogClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">
-                        Join a Room
-                    </DialogTitle>
-                    <DialogContent>
+                    <Dialog
+                        open={openJoin}
+                        onClose={handleJoinDialogClose}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="form-dialog-title">
+                            Join a Room
+                        </DialogTitle>
+                        <DialogContent>
 
-                        <DialogContentText>
-                            Enter the room code:
-                        </DialogContentText>
+                            <DialogContentText>
+                                Enter the room code:
+                            </DialogContentText>
 
-                        <TextField
-                            auroFocus
-                            margin="dense"
-                            id="dialog-text"
-                            type="text"
-                            fullWidth
-                            value={roomCode}
-                            onChange={handleRoomCodeChange}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleJoinDialogClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleRoomJoin} color="primary">
-                            Continue
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                            <TextField
+                                auroFocus
+                                margin="dense"
+                                id="dialog-text"
+                                type="text"
+                                fullWidth
+                                value={roomCode}
+                                onChange={handleRoomCodeChange}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleJoinDialogClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={handleRoomJoin} color="primary">
+                                Continue
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
 
-            </div>
+                </div>
+            </Paper>
         </div>
     );
     // }

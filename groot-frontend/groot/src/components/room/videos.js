@@ -6,7 +6,7 @@ import {
     makeStyles,
     Card,
     CardMedia,
-    CardContent
+    CardContent,
 } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +42,6 @@ function Videos(props) {
 
     return (
         <div className={classes.root}>
-
             <Grid container spacing={3}>
                 {
                     Object.keys(props.RoomInfo.participants).map(id => {
@@ -51,17 +50,23 @@ function Videos(props) {
                             <div>
                                 <Grid item xs>
                                     <Card className={classes.card}>
-                                        
+
                                         <CardContent>
                                             {props.RoomInfo.participants[id].name}
                                         </CardContent>
-                                        
-                                        <CardMedia
+
+                                        {/* <CardMedia
                                             component='video'
-                                            muted={id===props.UserInfo.data.id}
+                                            muted={id === props.UserInfo.data.id}
                                             className={classes.media}
                                             autoPlay
                                             id={`video-${id}`}
+                                        /> */}
+                                        <video 
+                                            id={`video-${id}`}
+                                            autoPlay
+                                            muted={id === props.UserInfo.data.id}
+                                            className={classes.media}
                                         />
 
                                     </Card>
@@ -74,6 +79,7 @@ function Videos(props) {
 
 
             </Grid>
+
 
         </div>
     )

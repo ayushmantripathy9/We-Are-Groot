@@ -1,15 +1,37 @@
-import { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core"
+import { useEffect, useState } from "react"
 
 import cookie from 'react-cookies'
-import { useDispatch } from "react-redux";
-import { userLogin } from "../../actions/user";
+import { useDispatch } from "react-redux"
+import { userLogin } from "../../actions/user"
 
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { Paper } from "@material-ui/core"
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        height: "100.0vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    paper: {
+        height:"100%",
+        width:"100%",
+        display:"flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
+
+}))
 
 export default function VerifyLogin() {
     const [invalidToken, setInvalidToken] = useState(true)
     const [verificationStatus, setVerificationStatus] = useState(false)
 
     const dispatch = useDispatch()
+
+    const classes = useStyles()
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
@@ -34,8 +56,10 @@ export default function VerifyLogin() {
     }, [])
 
     return (
-        <div>
-            You are being verified
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <CircularProgress color="secondary" />
+            </Paper>
         </div>
     )
 
