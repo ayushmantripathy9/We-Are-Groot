@@ -1,6 +1,8 @@
+import { makeStyles } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 import { apiWSCall, routeHome } from "../../urls"
+import Chat from "./chat"
 
 import {
     ANSWER,
@@ -11,6 +13,18 @@ import {
 
 import Videos from "./videos"
 
+const useStyles = makeStyles((theme)=>({
+    root:{
+        display: "grid",
+        gridTemplateColumns: "4fr 1fr"
+    },
+    videoChat: {
+
+    },
+    chat: {
+
+    } 
+}))
 
 function VideoCall(props) {
 
@@ -25,6 +39,8 @@ function VideoCall(props) {
     const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users 
 
     const callWebSocket = useRef()
+
+    const classes = useStyles()
 
     useEffect(() => {
         callWebSocket.current = new WebSocket(apiWSCall(props.RoomInfo.room_code))
@@ -135,8 +151,12 @@ function VideoCall(props) {
                         if (id === UserData.id)
                             return
 
-                        if (!videoStreamSent.current[id])
+                        if (!videoStreamSent.current[id]) {
+                            peerConnections.current[id].getSenders().forEach(sender => {
+                                peerConnections.current[id].removeTrack(sender)
+                            })
                             videoStreamSent.current[id] = peerConnections.current[id].addTrack(videoStreamTracks[0], stream)
+                        }
                     })
 
                     setUserStreams({
@@ -331,7 +351,7 @@ function VideoCall(props) {
     function handleOfferMessage(message) {
         const { targetID, senderID, sdp } = message
 
-        if (targetID !== UserData.id)
+        if ((targetID !== UserData.id) || (senderID === UserData.id))
             return
 
         const description = new RTCSessionDescription(sdp)
@@ -373,6 +393,7 @@ function VideoCall(props) {
                     }
                 })
             })
+            .catch(error => console.log("Offer Handling, ", error))
     }
 
     function handleAnswerMessage(message) {
@@ -386,7 +407,7 @@ function VideoCall(props) {
         peerConnections.current[senderID]
             .setRemoteDescription(description)
             .then(() => { })
-            .catch(() => { })
+            .catch((error) => { console.log("Answer Handling ", error) })
     }
 
     function handleIceCandidiateMessage(message) {
@@ -398,6 +419,7 @@ function VideoCall(props) {
         peerConnections.current[message.senderID]
             .addIceCandidate(ice_candidiate)
             .then(() => { })
+            .catch(error => console.log("Ice candidate handling error", error))
     }
 
     //      END OF FUNCTIONS FOR HANDLING RTC SIGNALLING EVENTS     //
@@ -409,28 +431,34 @@ function VideoCall(props) {
     }
 
     return (
-        <div>
-            <button
-                onClick={toggleAudio}
-            >
-                Toggle Audio
-            </button>
-            <button
-                onClick={toggleVideo}
-            >
-                Toggle Video
-            </button>
-            <button
-                onClick={leaveRoom}
-            >
-                Leave Room
-            </button>
-            <br />
-            <br />
-            Videos
-            <br />
-            <Videos userStreams={userStreams} />
+        <div className={classes.root}>
+            <div className={classes.videoChat}>
+                <button
+                    onClick={toggleAudio}
+                >
+                    Toggle Audio
+                </button>
+                <button
+                    onClick={toggleVideo}
+                >
+                    Toggle Video
+                </button>
+                <button
+                    onClick={leaveRoom}
+                >
+                    Leave Room
+                </button>
 
+                <br />
+                <br />
+                <br />
+
+                <Videos userStreams={userStreams} />
+            </div>
+            <div className={classes.chat}>
+                CHAT HERE
+                {/* <Chat /> */}
+            </div>
         </div>
     )
 }
