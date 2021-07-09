@@ -9,7 +9,7 @@ class Message(models.Model):
         Room,
         null=False,
         on_delete=models.CASCADE,
-        related_name='all_room_messages'
+        related_name='message'
     )
 
     sender = models.ForeignKey(
