@@ -61,6 +61,7 @@ function Home(props) {
 
     const handleCreateDialogClose = (box) => {
         setOpenCreate(false)
+        setRoomName('')
     }
 
     const handleRoomCreate = () => {
@@ -78,6 +79,7 @@ function Home(props) {
 
     const handleJoinDialogClose = (box) => {
         setOpenJoin(false)
+        setRoomCode('')
     }
 
     const handleRoomJoin = () => {
@@ -138,7 +140,7 @@ function Home(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCreateDialogClose} color="secondary">
+                            <Button onClick={handleCreateDialogClose} color="default">
                                 Cancel
                             </Button>
                             <Button onClick={handleRoomCreate} color="secondary">
@@ -181,7 +183,7 @@ function Home(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleJoinDialogClose} color="seondary">
+                            <Button onClick={handleJoinDialogClose} color="default">
                                 Cancel
                             </Button>
                             <Button onClick={handleRoomJoin} color="secondary">
