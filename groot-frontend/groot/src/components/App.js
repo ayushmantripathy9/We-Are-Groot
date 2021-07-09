@@ -1,7 +1,7 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 
-import { BrowserRouter as Router } from "react-router-dom"
+import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import Routing from "./Routing";
 import NavBarTop from "./nav"
@@ -16,7 +16,7 @@ function App(props) {
     })
 
     return (
-        <Router>
+        
             <ThemeProvider theme={theme}>
                 <div 
                     style={{
@@ -24,10 +24,11 @@ function App(props) {
                     }}
                 >
                     <NavBarTop />
-                    <Routing />
+                    <Router>
+                        <Route path='/' component={Routing} />
+                    </Router>
                 </div>
             </ThemeProvider>
-        </Router>
     )
 
 }

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     card: {
-        maxWidth: 255,
+        maxWidth: 375,
         marginRight: "1rem",
         marginBottom: "1rem",
         paddingBottom:"0.4rem",
@@ -87,6 +87,7 @@ function Videos(props) {
                                             muted={id === props.UserInfo.data.id}
                                             className={classes.media}
                                             height="175"
+                                            width="275"
                                         />
 
                                     </Card>
