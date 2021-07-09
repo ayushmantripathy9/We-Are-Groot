@@ -2,7 +2,18 @@ import { makeStyles } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 import { apiWSCall, routeHome } from "../../urls"
-import Chat from "./chat"
+
+import MicIcon from '@material-ui/icons/Mic'
+import MicOffIcon from '@material-ui/icons/MicOff'
+import VideocamIcon from '@material-ui/icons/Videocam'
+import VideocamOffIcon from '@material-ui/icons/VideocamOff'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import FileCopyIcon from '@material-ui/icons/FileCopy'
+
+import {
+    Button
+} from "@material-ui/core"
+
 
 import {
     ANSWER,
@@ -15,7 +26,7 @@ import Videos from "./videos"
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height:"85.25vh",
+        height: "88.75vh",
         display: "grid",
         gridTemplateRows: "20fr 1fr",
         paddingTop: "1rem"
@@ -23,9 +34,18 @@ const useStyles = makeStyles((theme) => ({
     videos: {
 
     },
-    controls:{
-
+    controls: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-end"
+    },
+    joiningInfo:{
+        paddingRight:"2rem",
+    },
+    button: {
+        margin: theme.spacing(0.5),
     }
+
 }))
 
 function VideoCall(props) {
@@ -444,6 +464,9 @@ function VideoCall(props) {
         window.location = routeHome()
     }
 
+    function handleCopyJoiningInfo() {
+        navigator.clipboard.writeText(props.RoomInfo.room_code)
+    }
     return (
         <div className={classes.root}>
 
@@ -453,25 +476,42 @@ function VideoCall(props) {
             </div>
 
             <div className={classes.controls}>
-                <h3>
-                    Room Code : {props.RoomInfo.room_code}
-                </h3>
-                <button
-                    onClick={toggleAudio}
-                >
-                    Toggle Audio
-                </button>
-                <button
-                    onClick={toggleVideo}
-                >
-                    Toggle Video
-                </button>
-                <button
-                    onClick={leaveRoom}
-                >
-                    Leave Room
-                </button>
 
+                <div>
+                    <Button
+                        startIcon={videoState ? <VideocamIcon /> : <VideocamOffIcon />}
+                        color="secondary"
+                        onClick={toggleVideo}
+                    />
+
+
+                    <Button
+                        startIcon={audioState ? <MicIcon /> : <MicOffIcon />}
+                        color="secondary"
+                        onClick={toggleAudio}
+                    />
+
+                    <Button
+                        startIcon={<ExitToAppIcon />}
+                        color="secondary"
+                        onClick={leaveRoom}
+                    />
+                </div>
+                <div className={classes.joiningInfo}>
+                    <Button
+                        color="default"
+                        endIcon={<FileCopyIcon />}
+                        style={{
+                            backgroundColor:"green",
+                            padding: "0.6rem",
+                            textTransform: 'none'
+                        }}
+                        onClick={handleCopyJoiningInfo}
+                    >
+                        Copy Room Code
+                    </Button>
+
+                </div>
             </div>
 
         </div>
