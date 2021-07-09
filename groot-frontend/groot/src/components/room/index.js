@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 
 import { connect, useDispatch } from "react-redux"
-import { addNewParticipant, initializePartipantsList } from "../../actions/room"
+import { addNewParticipant, initializePartipantsList, joinRoom } from "../../actions/room"
 
 import { apiWSRoom } from "../../urls"
 
@@ -41,12 +41,19 @@ function Room(props) {
     const classes = useStyles()
 
     useEffect(() => {
-        roomWebSocket.current = new WebSocket(apiWSRoom(props.RoomInfo.room_code))
-        roomWebSocket.current.onmessage = event => {
-            const message = JSON.parse(event.data)
-            handleWebSocketMessage(message)
+        if(props.RoomInfo.loaded){
+            roomWebSocket.current = new WebSocket(apiWSRoom(props.RoomInfo.room_code))
+            roomWebSocket.current.onmessage = event => {
+                const message = JSON.parse(event.data)
+                handleWebSocketMessage(message)
+            }
         }
-    }, [])
+        else{
+            const room_code = props.match.params.room_code
+            console.log(props.match.params)
+            dispatch(joinRoom(room_code))
+        }
+    }, [props.RoomInfo.loaded])
 
 
     function handleWebSocketMessage(message) {
@@ -96,7 +103,6 @@ function Room(props) {
         return room_participants
     }
 
-
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -109,6 +115,7 @@ function Room(props) {
 
         </div>
     )
+    
 }
 
 function mapStateToProps(state){

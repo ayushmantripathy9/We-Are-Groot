@@ -47,10 +47,6 @@ function Home(props) {
 
         if (RoomInfo.error === 0) {
             props.history.push(`/room/${RoomInfo.room_code}`)
-            // alert(`/room/${RoomInfo.room_code}/`)
-            // return(
-            //     <Redirect to={`/room/${RoomInfo.room_code}/`} />
-            // )   
         }
     }, [RoomInfo])
 
