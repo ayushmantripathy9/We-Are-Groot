@@ -25,19 +25,20 @@ const useStyles = makeStyles((theme) => ({
     },
     chatRoot: {
         height: "100%",
+        paddingBottom: "0.8rem"
     },
     chatHeader: {
         height: "5vh",
         paddingTop: "1rem",
         paddingLeft: "1rem",
+        paddingBottom: "0.5rem",
     },
     paper: {
         height: "100%",
         paddingTop: "1rem",
         paddingLeft: "1rem",
         paddingBottom: "1rem",
-        overflow: "hidden"
-
+        overflow: "hidden",
 
     },
     chatContainer: {

@@ -5,7 +5,7 @@ import {
     Grid,
     makeStyles,
     Card,
-    CardMedia,
+    Avatar,
     CardContent,
 } from "@material-ui/core"
 
@@ -14,7 +14,17 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     card: {
-        maxWidth: 345,
+        maxWidth: 255,
+        marginRight: "1rem",
+        marginBottom: "1rem",
+        paddingBottom:"0.4rem",
+        paddingRight: "0.7rem",
+        paddingLeft: "0.7rem"
+    },
+    cardContent:{
+        display: "flex",
+        justifyContent: "space-between",
+        paddingBottom:"1rem",
     },
     media: {
         height: 175,
@@ -60,8 +70,15 @@ function Videos(props) {
                                 <Grid item xs>
                                     <Card className={classes.card}>
 
-                                        <CardContent>
-                                            {props.RoomInfo.participants[id].name}
+                                        <CardContent className={classes.cardContent}>
+                                            <div
+                                                style={{
+                                                    paddingTop:"0.3rem"
+                                                }}
+                                            >
+                                                {props.RoomInfo.participants[id].name}
+                                            </div>
+                                            <Avatar src={props.RoomInfo.participants[id].profile_pic} /> 
                                         </CardContent>
 
                                         <video 
