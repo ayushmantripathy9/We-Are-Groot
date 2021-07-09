@@ -3,7 +3,8 @@ import {
     AppBar,
     Typography,
     Toolbar,
-    Avatar
+    Avatar,
+    CssBaseline
 } from "@material-ui/core"
 
 import { useState } from "react"
@@ -17,6 +18,7 @@ import Brightness7Icon from "@material-ui/icons/Brightness7"
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        height: "48px"
     },
     title: {
         flexGrow: 1,
@@ -49,6 +51,7 @@ function NavBarTop() {
     if (UserInfo.login === false) {
         return (
             <div className={classes.root}>
+                <CssBaseline />
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
@@ -73,6 +76,7 @@ function NavBarTop() {
     else {
         return (
             <div className={classes.root}>
+                <CssBaseline />
                 <AppBar position="absolute">
                     <Toolbar>
                         <div className={classes.navStart}>
