@@ -18,8 +18,14 @@ function App(props) {
     return (
         <Router>
             <ThemeProvider theme={theme}>
-                <NavBarTop />
-                <Routing />
+                <div 
+                    style={{
+                        height: "100vh"
+                    }}
+                >
+                    <NavBarTop />
+                    <Routing />
+                </div>
             </ThemeProvider>
         </Router>
     )

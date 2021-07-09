@@ -13,6 +13,7 @@ import {
     DialogTitle,
     TextField,
     makeStyles,
+    CssBaseline
 } from '@material-ui/core'
 
 import { createRoom, joinRoom } from "../../actions/room";
@@ -21,7 +22,9 @@ import { routeHome } from "../../urls";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: "100vh"
+        height: "calc(100vh - 48px)",
+        padding: "0",
+        overflow: "hidden"
     },
     paper: {
         height: "100%",
@@ -88,6 +91,7 @@ function Home(props) {
 
     return (
         <div className={classes.root}>
+            <CssBaseline />
             <Paper
                 className={classes.paper}
             >
@@ -128,7 +132,7 @@ function Home(props) {
                             </DialogContentText>
 
                             <TextField
-                                auroFocus
+                                autoFocus
                                 margin="dense"
                                 id="dialog-text"
                                 type="text"
@@ -138,10 +142,10 @@ function Home(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCreateDialogClose} color="primary">
+                            <Button onClick={handleCreateDialogClose} color="secondary">
                                 Cancel
                             </Button>
-                            <Button onClick={handleRoomCreate} color="primary">
+                            <Button onClick={handleRoomCreate} color="secondary">
                                 Continue
                             </Button>
                         </DialogActions>
@@ -171,7 +175,7 @@ function Home(props) {
                             </DialogContentText>
 
                             <TextField
-                                auroFocus
+                                autoFocus
                                 margin="dense"
                                 id="dialog-text"
                                 type="text"
@@ -181,10 +185,10 @@ function Home(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleJoinDialogClose} color="primary">
+                            <Button onClick={handleJoinDialogClose} color="seondary">
                                 Cancel
                             </Button>
-                            <Button onClick={handleRoomJoin} color="primary">
+                            <Button onClick={handleRoomJoin} color="secondary">
                                 Continue
                             </Button>
                         </DialogActions>
@@ -194,7 +198,6 @@ function Home(props) {
             </Paper>
         </div>
     );
-    // }
 
 }
 

@@ -1,3 +1,4 @@
+import { makeStyles } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 
 import { connect, useDispatch } from "react-redux"
@@ -12,7 +13,23 @@ import {
 } from "./messageTypes/room"
 
 import VideoCall from "./videoCall"
+import Chat from "./chat"
+import { CssBaseline } from "@material-ui/core"
 
+const useStyles = makeStyles((theme)=>({
+    root:{
+        display: "grid",
+        gridTemplateColumns: "6fr 2fr",
+        paddingTop: "2rem",
+        paddingLeft: "2rem"
+    },
+    videoCall:{
+
+    },
+    chat:{
+
+    },
+}))
 
 function Room(props) {
     const roomWebSocket = useRef(null)
@@ -20,6 +37,8 @@ function Room(props) {
     const [participantsReceived, setParticipantsRecieved] = useState(false)
 
     const dispatch = useDispatch()
+
+    const classes = useStyles()
 
     useEffect(() => {
         roomWebSocket.current = new WebSocket(apiWSRoom(props.RoomInfo.room_code))
@@ -79,13 +98,14 @@ function Room(props) {
 
 
     return (
-        <div>
-            <h2>Room component</h2>
-            <h3>
-                Room Code : {props.RoomInfo.room_code}
-            </h3>
-
-            {participantsReceived && <VideoCall />}
+        <div className={classes.root}>
+            <CssBaseline />
+            <div className={classes.videoCall}>
+                {participantsReceived && <VideoCall />}
+            </div>
+            <div className={classes.chat}>
+                {participantsReceived && <Chat />}
+            </div>
 
         </div>
     )

@@ -15,13 +15,15 @@ import Videos from "./videos"
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        height:"85.25vh",
         display: "grid",
-        gridTemplateColumns: "4fr 1fr"
+        gridTemplateRows: "20fr 1fr",
+        paddingTop: "1rem"
     },
-    videoChat: {
+    videos: {
 
     },
-    chat: {
+    controls:{
 
     }
 }))
@@ -444,7 +446,16 @@ function VideoCall(props) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.videoChat}>
+
+            <div className={classes.videos}>
+                <Videos userStreams={userStreams} />
+
+            </div>
+
+            <div className={classes.controls}>
+                <h3>
+                    Room Code : {props.RoomInfo.room_code}
+                </h3>
                 <button
                     onClick={toggleAudio}
                 >
@@ -461,16 +472,8 @@ function VideoCall(props) {
                     Leave Room
                 </button>
 
-                <br />
-                <br />
-                <br />
+            </div>
 
-                <Videos userStreams={userStreams} />
-            </div>
-            <div className={classes.chat}>
-                CHAT HERE
-                {/* <Chat /> */}
-            </div>
         </div>
     )
 }
