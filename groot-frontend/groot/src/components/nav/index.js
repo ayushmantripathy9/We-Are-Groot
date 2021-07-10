@@ -108,7 +108,7 @@ function NavBarTop() {
                     position="absolute" 
                     color="secondary"
                     style={{
-                        color: "black"
+                        background: "#000000"
                     }}
                 >
                     <Toolbar>
@@ -116,6 +116,10 @@ function NavBarTop() {
                             <Fab
                                 size="small"
                                 onClick={handleAvatarClick}
+                                style={{
+                                    marginTop: "1rem",
+                                    marginLeft: "-0.5rem"
+                                }}
                             >
                                 <Avatar 
                                     alt={UserInfo.data.name} 
@@ -161,7 +165,7 @@ function NavBarTop() {
                                 </Button>
                             </Menu>
 
-                            <Typography variant="h6" className={classes.title}>
+                            <Typography variant="h6" className={classes.title} style={{marginTop:"1rem"}}>
                                 Groot Meetings
                             </Typography>
                         </div>
@@ -171,6 +175,7 @@ function NavBarTop() {
                                 color="inherit"
                                 aria-label="mode"
                                 onClick={handleThemeChange}
+                                style={{marginTop:"0.5rem"}}
                             >
                                 {icon}
                             </IconButton>

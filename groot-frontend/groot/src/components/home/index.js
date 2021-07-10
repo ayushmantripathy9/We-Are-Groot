@@ -74,42 +74,40 @@ function Home(props) {
                 <div className={classes.leftBar}>
                     <div className={classes.navigation}>
                         <Button
-                            startIcon={
-                                <AddCircleIcon
-                                    style={{
-                                        fontSize: "30px"
-                                    }}
-                                />
-                            }
                             color="default"
                             style={{
                                 marginBottom: "2rem"
                             }}
                             onClick={handleHomeClick}
-                        />
+                        >
+                            <AddCircleIcon
+                                style={{
+                                    fontSize: "30px"
+                                }}
+                            />
+                        </Button>
 
                         <Button
-                            startIcon={
-                                <HistoryIcon
-                                    style={{
-                                        fontSize: "30px"
-                                    }}
-                                />
-                            }
                             color="default"
                             onClick={handleHistoryClick}
-                        />
+                        >
+                            <HistoryIcon
+                                style={{
+                                    fontSize: "30px"
+                                }}
+                            />
+                        </Button>
                     </div>
                 </div>
                 {
                     showHistory
                         ?
-                            <div className={classes.room}>          
-                                <History />
-                            </div>
-                        :   <div className={classes.room}>
-                                <Joining />
-                            </div>
+                        <div className={classes.room}>
+                            <History />
+                        </div>
+                        : <div className={classes.room}>
+                            <Joining />
+                        </div>
                 }
 
             </Paper>
