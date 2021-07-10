@@ -41,7 +41,17 @@ class SignallingConsumer(WebsocketConsumer):
             self.close()
 
     def disconnect(self, code):
-
+        message_data = {
+            'type': signalling_events.PARTICIPANT_LEFT,
+            'data': UserGetSerializer(self.user).data
+        }
+        async_to_sync(self.channel_layer.group_send)(
+            self.call_group_name,
+            {
+                'type':"send_message_to_all",
+                'message': message_data
+            }
+        )
         async_to_sync(self.channel_layer.group_discard)(
             self.call_group_name,
             self.channel_name
