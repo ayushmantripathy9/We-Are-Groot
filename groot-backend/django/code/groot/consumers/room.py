@@ -20,6 +20,7 @@ class RoomConsumer(WebsocketConsumer):
 
         try:
             room = Room.objects.get(room_code=self.room_code)
+            self.room = room
 
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name, 
@@ -59,6 +60,8 @@ class RoomConsumer(WebsocketConsumer):
             'type': room_events.USER_LEFT,
             'data': UserGetSerializer(self.user).data
         }
+
+        self.room.participants.remove(self.user)
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
