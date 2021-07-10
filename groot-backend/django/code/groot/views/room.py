@@ -84,6 +84,7 @@ class RoomViewSet(viewsets.ModelViewSet):
                 )
             else:
                 room.participants.add(user)
+                room.participants_history.add(user)
                 room.save()
 
                 room_details = RoomGetSerializer(room).data

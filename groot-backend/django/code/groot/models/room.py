@@ -28,6 +28,13 @@ class Room(models.Model):
         blank=True
     )
 
+    # the participants history
+    participants_history = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='past_rooms_of_user',
+        blank=True
+    ) 
+
     # creation time of the room
     start_time = models.DateTimeField(
         auto_now_add=True
