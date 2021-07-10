@@ -5,6 +5,7 @@ import { apiRoomCreate, apiRoomJoin } from '../urls'
 import { 
     INITIALIZE_ROOM, 
     INITILIAZE_PARTICIPANTS, 
+    ROOM_PARTICIPANT_LEAVE, 
     UPDATE_PARTICIPANTS 
 } from './types'
 
@@ -84,6 +85,17 @@ export const addNewParticipant = (participant) => {
             type: UPDATE_PARTICIPANTS,
             payload: {
                 newParticipant: participant
+            }
+        })
+    }
+}
+
+export const participantLeave = (participant) => {
+    return dispatch => {
+        dispatch({
+            type: ROOM_PARTICIPANT_LEAVE,
+            payload: {
+                participant: participant
             }
         })
     }

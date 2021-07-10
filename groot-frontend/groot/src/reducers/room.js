@@ -1,6 +1,7 @@
 import {
     INITIALIZE_ROOM,
     INITILIAZE_PARTICIPANTS,
+    ROOM_PARTICIPANT_LEAVE,
     UNSUCCESSFUL_ROOM_INITIALIZATION,
     UPDATE_PARTICIPANTS
 } from "../actions/types"
@@ -35,7 +36,15 @@ const roomInfo = (state = initialRoomState, action) => {
                     [action.payload.newParticipant.id]: action.payload.newParticipant
                 }
             }
-
+        
+        case ROOM_PARTICIPANT_LEAVE:
+            let participant_dict = state.participants
+            delete participant_dict[action.payload.participant.id]
+            return {
+                ...state,
+                participants: participant_dict
+            }
+            
         case UNSUCCESSFUL_ROOM_INITIALIZATION:
             return {
                 ...state,

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 
 import { connect, useDispatch } from "react-redux"
-import { addNewParticipant, initializePartipantsList, joinRoom } from "../../actions/room"
+import { addNewParticipant, initializePartipantsList, joinRoom, participantLeave } from "../../actions/room"
 
 import { apiWSRoom } from "../../urls"
 
@@ -81,6 +81,7 @@ function Room(props) {
             // write a dispatch method to remove user from RoomInfo
             case USER_LEFT:
                 console.log("User Left: ",data)
+                dispatch(participantLeave(data))
                 break
 
             default:
