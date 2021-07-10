@@ -396,17 +396,18 @@ function VideoCall(props) {
         peerConnections.current[senderID]
             .setRemoteDescription(description)
             .then(() => {
-                if (userStreams[UserData.id]) {
+                const my_stream = document.getElementById(`video-${UserData.id}`).srcObject
+                if (my_stream) {
                     if (!audioStreamSent.current[senderID]) {
-                        const audioStreamTracks = userStreams[UserData.id].getAudioTracks()
+                        const audioStreamTracks = my_stream.getAudioTracks()
                         if (audioStreamTracks.length > 0)
-                            audioStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(audioStreamTracks[0], userStreams[UserData.id])
+                            audioStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(audioStreamTracks[0], my_stream)
                     }
 
                     if (!videoStreamSent.current[senderID]) {
-                        const videoStreamTracks = userStreams[UserData.id].getVideoTracks()
+                        const videoStreamTracks = my_stream.getVideoTracks()
                         if (videoStreamTracks.length > 0) {
-                            videoStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(videoStreamTracks[0], userStreams[UserData.id])
+                            videoStreamSent.current[senderID] = peerConnections.current[senderID].addTrack(videoStreamTracks[0], my_stream)
                         }
                     }
                 }
