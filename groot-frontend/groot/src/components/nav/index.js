@@ -7,7 +7,6 @@ import {
     CssBaseline,
     Fab,
     Menu,
-    MenuItem,
     Button
 } from "@material-ui/core"
 
@@ -19,14 +18,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Brightness3Icon from "@material-ui/icons/Brightness3"
 import Brightness7Icon from "@material-ui/icons/Brightness7"
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import axios from "axios"
-import { apiLogout, routeHome } from "../../urls"
 import { userLogout } from "../../actions/user"
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        height: "48px"
+        height: "48px",
     },
     title: {
         flexGrow: 1,
@@ -34,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     navStart: {
         display: "grid",
         gridTemplateColumns: "45% 40% 15%",
-        width: "97%"
+        width: "97%",
     },
     navEnd: {
         display: "flex",
@@ -107,7 +104,13 @@ function NavBarTop() {
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppBar position="absolute">
+                <AppBar 
+                    position="absolute" 
+                    color="secondary"
+                    style={{
+                        color: "black"
+                    }}
+                >
                     <Toolbar>
                         <div className={classes.navStart}>
                             <Fab
