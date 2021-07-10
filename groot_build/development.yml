@@ -3,10 +3,10 @@ version: '3.8'
 services:
     db:
         restart: always
-        build: ./groot-backend/postgresql
+        build: ../groot-backend/postgresql
         container_name: groot_db
         env_file: 
-            - ./groot-backend/postgresql/database.env
+            - ../groot-backend/postgresql/database.env
         expose: 
             - 5432
         volumes: 
@@ -16,7 +16,7 @@ services:
     
     redis:
         restart: always
-        build: ./groot-backend/redis
+        build: ../groot-backend/redis
         container_name: groot_redis
         expose:
             - 6379
@@ -25,13 +25,13 @@ services:
     
     web:
         restart: always
-        build: ./groot-backend/django
+        build: ../groot-backend/django
         container_name: groot_web
-        command: sh -c "python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"
+        command: sh -c "python manage.py collectstatic --no-input && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         volumes: 
-            - ./groot-backend/django/code/:/code/
-            - ./groot-backend/static/:/static/
-            - ./groot-backend/media/:/media/
+            - ../groot-backend/django/code/:/code/
+            - ../groot-backend/static/:/static/
+            - ../groot-backend/media/:/media/
         expose:
             - 8000
         ports:
@@ -44,12 +44,12 @@ services:
     
     frontend:
         restart: always
-        build: ./groot-frontend
+        build: ../groot-frontend
         container_name: groot_frontend
         command: sh -c "yarn start"
         volumes: 
-            - ./groot-frontend/groot/:/groot/
-            - ./groot-frontend/groot/node_modules/:/groot/node_modules/
+            - ../groot-frontend/groot/:/groot/
+            - ../groot-frontend/groot/node_modules/:/groot/node_modules/
         expose:
             - 3000
         ports: 
