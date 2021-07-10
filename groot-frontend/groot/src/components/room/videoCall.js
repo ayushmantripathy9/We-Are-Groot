@@ -19,7 +19,8 @@ import {
     ANSWER,
     CALL_CONNECTED,
     ICE_CANDIDATE,
-    OFFER
+    OFFER,
+    PARTICIPANT_LEFT
 } from "./messageTypes/signalling"
 
 import Videos from "./videos"
@@ -217,6 +218,18 @@ function VideoCall(props) {
 
             case ICE_CANDIDATE:
                 handleIceCandidiateMessage(data)
+                break
+
+            case PARTICIPANT_LEFT:
+                let new_pc_dict = peerConnections.current
+                delete new_pc_dict[data.id]
+                peerConnections.current = new_pc_dict
+
+                let new_vc_dict = videoStreamSent.current
+                delete new_vc_dict[data.id]
+                videoStreamSent.current = new_vc_dict
+
+                console.log("New Peer Connections State", peerConnections.current)
                 break
 
             default:
