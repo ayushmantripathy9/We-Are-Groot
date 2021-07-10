@@ -17,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 375,
         marginRight: "1rem",
         marginBottom: "1rem",
-        paddingBottom:"0.4rem",
+        paddingBottom: "0.4rem",
         paddingRight: "0.7rem",
         paddingLeft: "0.7rem"
     },
-    cardContent:{
+    cardContent: {
         display: "flex",
         justifyContent: "space-between",
-        paddingBottom:"1rem",
+        paddingBottom: "1rem",
     },
     media: {
         height: 175,
@@ -44,12 +44,12 @@ function Videos(props) {
                 if (tracks.length > 0 && !!videoElement) {
                     videoElement.srcObject = props.userStreams[id]
                 }
-                else{
-                    console.log("Tracks not found 1 ",props.RoomInfo.participants[id].name)
+                else {
+                    console.log("Tracks not found 1 ", props.RoomInfo.participants[id].name)
                     videoElement.srcObject = null
                 }
             }
-            else{
+            else {
                 console.log("Tracks not found 2 ", props.RoomInfo.participants[id].name)
                 const videoElement = document.getElementById(`video-${id}`)
                 videoElement.srcObject = null
@@ -62,39 +62,71 @@ function Videos(props) {
     return (
         <div className={classes.root}>
             <Grid container spacing={3}>
+
+                <div>
+                    <Grid item xs>
+                        <Card className={classes.card}>
+
+                            <CardContent className={classes.cardContent}>
+                                <div
+                                    style={{
+                                        paddingTop: "0.3rem"
+                                    }}
+                                >
+                                    {props.UserInfo.data.name}
+                                </div>
+                                <Avatar src={props.UserInfo.data.profile_pic} />
+                            </CardContent>
+
+                            <video
+                                id={`video-${props.UserInfo.data.id}`}
+                                autoPlay
+                                muted
+                                className={classes.media}
+                                height="175"
+                                width="275"
+                            />
+
+                        </Card>
+                    </Grid>
+                </div>
+
                 {
+
+
                     Object.keys(props.RoomInfo.participants).map(id => {
-                        return (
+                        if(id != props.UserInfo.data.id){
+                            return (
 
-                            <div>
-                                <Grid item xs>
-                                    <Card className={classes.card}>
+                                <div>
+                                    <Grid item xs>
+                                        <Card className={classes.card}>
 
-                                        <CardContent className={classes.cardContent}>
-                                            <div
-                                                style={{
-                                                    paddingTop:"0.3rem"
-                                                }}
-                                            >
-                                                {props.RoomInfo.participants[id].name}
-                                            </div>
-                                            <Avatar src={props.RoomInfo.participants[id].profile_pic} /> 
-                                        </CardContent>
+                                            <CardContent className={classes.cardContent}>
+                                                <div
+                                                    style={{
+                                                        paddingTop: "0.3rem"
+                                                    }}
+                                                >
+                                                    {props.RoomInfo.participants[id].name}
+                                                </div>
+                                                <Avatar src={props.RoomInfo.participants[id].profile_pic} />
+                                            </CardContent>
 
-                                        <video 
-                                            id={`video-${id}`}
-                                            autoPlay
-                                            muted={id === props.UserInfo.data.id}
-                                            className={classes.media}
-                                            height="175"
-                                            width="275"
-                                        />
+                                            <video
+                                                id={`video-${id}`}
+                                                autoPlay
+                                                className={classes.media}
+                                                height="175"
+                                                width="275"
+                                            />
 
-                                    </Card>
-                                </Grid>
-                            </div>
+                                        </Card>
+                                    </Grid>
+                                </div>
 
-                        )
+                            )
+                        }
                     })
                 }
 
