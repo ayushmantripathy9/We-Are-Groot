@@ -58,3 +58,33 @@ class RoomPostSerializer(ModelSerializer):
             'room_code',
             'start_time'
         ]
+
+class RoomHistorySerializer(ModelSerializer):
+    """
+        This is to serialize the data pertaining to a Room, while retrieving the history.
+        This would be used during GET Method.
+    """
+
+    participants_history = UserGetSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Room
+        depth = 1
+
+        fields = [
+            'id',
+            'room_name',
+            'room_code',
+            'participants_history',
+            'start_time',
+            'end_time'
+        ]
+
+        read_only_fields = [
+            'id',
+            'room_name',
+            'room_code',
+            'participants_history',
+            'start_time',
+            'end_time'            
+        ]
