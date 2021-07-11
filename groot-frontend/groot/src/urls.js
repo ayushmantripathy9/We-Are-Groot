@@ -85,7 +85,7 @@ export const googleAuthRedirect = (stateToken) => {
             `response_type=code&` +
             `client_id=867350364877-4jq371ln9qmjtijqfe4tu53e2vrqlcbb.apps.googleusercontent.com&` +
             `scope=openid%20profile%20email&` +
-            `redirect_uri=https%3A//localhost:50000/redirect/&` +
+            `redirect_uri=http%3A//localhost:50000/redirect/&` +
             `state=${stateToken}0google&` +
             `provider=google`
 

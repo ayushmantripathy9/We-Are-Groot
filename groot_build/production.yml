@@ -61,10 +61,8 @@ services:
             - 80
             - 443
         ports:
-            # - "80:80"
-            # - "443:443"
-            - "50069:80"
-            - "51069:443"
+            - "80:80"
+            - "443:443"
         volumes:
             - ../nginx/ssl/:/etc/nginx/ssl/
             - static:/groot_static/
