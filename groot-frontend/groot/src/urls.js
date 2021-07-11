@@ -45,6 +45,10 @@ export const apiRoomJoin = () => {
     return `${apiHome()}room/join/`
 }
 
+export const apiRoomHistory = () => {
+    return `${apiHome()}room/history/`
+}
+
 
 // ... Backend API URLs --> WS  ... //
 
