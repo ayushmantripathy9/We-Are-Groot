@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: "calc(100vh - 48px)",
         padding: "0",
-        overflow: "hidden"
     },
-    paper: {
+    container: {
         height: "100%",
+        width: "100%",
         display: "grid",
-        gridTemplateColumns: "3fr 25fr"
+        gridTemplateColumns: "2fr 39fr"
 
     },
     leftBar: {
@@ -52,9 +52,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column"
     },
     room: {
+        gridColumn:"2/2",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        height: "calc(100vh - 48px)",
     },
     history: {
 
@@ -83,8 +85,8 @@ function Home(props) {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <Paper
-                className={classes.paper}
+            <div
+                className={classes.container}
             >
                 <div className={classes.leftBar}>
                     <div className={classes.navigation}>
@@ -141,7 +143,7 @@ function Home(props) {
                         </div>
                 }
 
-            </Paper>
+            </div>
         </div>
     );
 
