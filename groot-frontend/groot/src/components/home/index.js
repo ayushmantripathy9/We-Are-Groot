@@ -1,9 +1,7 @@
 import {
-    Paper,
     makeStyles,
     CssBaseline,
     Button,
-    Tooltip
 
 } from '@material-ui/core'
 
