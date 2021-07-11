@@ -113,7 +113,7 @@ export default function ChatHistory(props) {
             }
         }
 
-    }, [])
+    }, [props.room_code])
 
     useEffect(() => {
         scrollToBottom()
@@ -147,7 +147,8 @@ export default function ChatHistory(props) {
                     style={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center"
+                        justifyContent: "center",
+                        fontSize: "20px"
                     }}
                 >
                     <i>{ ` ${props.room_name}`}</i> 
