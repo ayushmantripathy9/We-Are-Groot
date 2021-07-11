@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from groot.models import Room, User
-from groot.serializers import UserGetSerializer, RoomGetSerializer, RoomPostSerializer
+from groot.serializers import UserGetSerializer, RoomGetSerializer, RoomPostSerializer, RoomHistorySerializer
 
 from rest_framework.permissions import IsAuthenticated
 from groot.permissions import CanAccessRoom
@@ -49,7 +49,8 @@ class RoomViewSet(viewsets.ModelViewSet):
         
         serializer.save(
             room_code=room_code,
-            participants=[self.request.user.pk,]
+            participants=[self.request.user.pk,],
+            participants_history=[self.request.user.pk]
         )
 
 
@@ -110,3 +111,20 @@ class RoomViewSet(viewsets.ModelViewSet):
     # error:    0 => no error,  user is already present in the room
     #           1 => room_code not present in request
     #           2 => room with such a room_code is not present
+
+
+    @action(detail=False, methods=['get',])
+    def history(self, request):
+        rooms = Room.objects.filter(participants_history__in=[request.user],)
+        print("Rooms :" ,rooms)
+        rooms_of_user = RoomHistorySerializer(rooms, many=True).data
+
+        return Response(
+            {
+                'message': "Rooms of User found",
+                'rooms': rooms_of_user,
+                'error': 0
+            }
+        )
+
+
