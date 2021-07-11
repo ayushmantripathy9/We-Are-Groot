@@ -111,6 +111,7 @@ export default function Joining(props) {
                         onClick={handleCreateDialogOpen}
                         style={{
                             marginRight: "2rem",
+                            textTransform: 'none'
                         }}
                         color="secondary"
                     >
@@ -124,7 +125,7 @@ export default function Joining(props) {
                         aria-labelledby="form-dialog-title"
                     >
                         <DialogTitle id="form-dialog-title" >
-                            Create New Room
+                            Create a new Room
                         </DialogTitle>
                         <DialogContent>
 
@@ -158,6 +159,9 @@ export default function Joining(props) {
                         size="large" color="primary"
                         onClick={handleJoinDialogOpen}
                         color="secondary"
+                        style={{
+                            textTransform:'none'
+                        }}
                     >
                         Join Room
                     </Button>

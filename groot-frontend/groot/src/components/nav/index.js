@@ -17,7 +17,7 @@ import { changeTheme } from "../../actions/theme"
 import IconButton from '@material-ui/core/IconButton'
 import Brightness3Icon from "@material-ui/icons/Brightness3"
 import Brightness7Icon from "@material-ui/icons/Brightness7"
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { userLogout } from "../../actions/user"
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     navStart: {
         display: "grid",
-        gridTemplateColumns: "45% 40% 15%",
+        gridTemplateColumns: "5% 80% 15%",
         width: "97%",
     },
     navEnd: {
@@ -117,8 +117,8 @@ function NavBarTop() {
                                 size="small"
                                 onClick={handleAvatarClick}
                                 style={{
-                                    marginTop: "1rem",
-                                    marginLeft: "-0.5rem"
+                                    marginTop: "0.7rem",
+                                    marginLeft: "-0.7rem"
                                 }}
                             >
                                 <Avatar 
@@ -154,7 +154,7 @@ function NavBarTop() {
                                     onClick={handleUserLogout}
                                     color="default"
                                     style={{
-                                        backgroundColor: "green",
+                                        backgroundColor: "red",
                                         padding: "0.6rem",
                                         textTransform: 'none'
                                     }}

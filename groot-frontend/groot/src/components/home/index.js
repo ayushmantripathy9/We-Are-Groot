@@ -3,16 +3,20 @@ import {
     makeStyles,
     CssBaseline,
     Button,
-    Divider
+    Tooltip
 
 } from '@material-ui/core'
 
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import HistoryIcon from '@material-ui/icons/History'
-import { useState } from 'react'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import History from './history'
 
+import { useState } from 'react'
+
 import Joining from "./joining"
+import { useDispatch } from 'react-redux'
+import { userLogout } from '../../actions/user'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +46,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         justifyContent: "flex-start"
     },
+    logout:{
+        gridRow: "3/3",
+        display: "flex",
+        flexDirection: "column"
+    },
     room: {
         display: "flex",
         justifyContent: "center",
@@ -57,12 +66,18 @@ function Home(props) {
     const classes = useStyles()
     const [showHistory, setShowHistory] = useState(false)
 
+    const dispatch = useDispatch()
+
     function handleHomeClick() {
         setShowHistory(false)
     }
 
     function handleHistoryClick() {
         setShowHistory(true)
+    }
+
+    function handleLogoutClick(){
+        dispatch(userLogout())
     }
 
     return (
@@ -79,10 +94,11 @@ function Home(props) {
                                 marginBottom: "2rem"
                             }}
                             onClick={handleHomeClick}
+                            title="Rooms"
                         >
                             <AddCircleIcon
                                 style={{
-                                    fontSize: "30px"
+                                    fontSize: "28px"
                                 }}
                             />
                         </Button>
@@ -90,10 +106,25 @@ function Home(props) {
                         <Button
                             color="default"
                             onClick={handleHistoryClick}
+                            title="Room History"
                         >
                             <HistoryIcon
                                 style={{
-                                    fontSize: "30px"
+                                    fontSize: "28px"
+                                }}
+                            />
+                        </Button>
+                    </div>
+                    <div className={classes.logout}>
+
+                        <Button
+                            color="default"
+                            title="Logout"
+                            onClick={handleLogoutClick}
+                        >
+                            <ExitToAppIcon
+                                style={{
+                                    fontSize: "28px"
                                 }}
                             />
                         </Button>
