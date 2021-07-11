@@ -4,7 +4,7 @@ const isDev = true
 
 // ... URL for frontend home ... //
 export const routeHome = () => {
-    return isDev ? "http://localhost:50000/" : "./"
+    return isDev ? "http://localhost:50000/" : "https://grootmeetings.eastus.cloudapp.azure.com/"
 }
 
 
@@ -14,7 +14,7 @@ export const routeHome = () => {
 
 // ... base URL for http api requests to the backend ... //
 export const apiHome = () => {
-    return "http://localhost:60000/api/"
+    return isDev ? "http://localhost:60000/api/" : "https://grootmeetings.eastus.cloudapp.azure.com/api/"
 }
 
 // ... URL for logging in a new user via Google... //
@@ -55,7 +55,7 @@ export const apiRoomHistory = () => {
 
 // ...  base URL for ws api requests to the backend ... //
 export const apiWSHome = () => {
-    return "ws://localhost:60000/ws/"
+    return isDev ? "ws://localhost:60000/ws/" : "wss://grootmeetings.eastus.cloudapp.azure.com/ws/"
 }
 
 // ... URLs for user joining a room for call ... //
@@ -78,25 +78,51 @@ export const apiWSChat = (room_code) => {
 // ... URL for Google OAuth where user would be redirected to ... //
 export const googleAuthRedirect = (stateToken) => {
     return (
-        `https://accounts.google.com/o/oauth2/v2/auth?` +
-        `response_type=code&` +
-        `client_id=867350364877-4jq371ln9qmjtijqfe4tu53e2vrqlcbb.apps.googleusercontent.com&` +
-        `scope=openid%20profile%20email&` +
-        `redirect_uri=http%3A//localhost:50000/redirect/&` +
-        `state=${stateToken}0google&`+
-        `provider=google`
+        isDev
+            ?
+
+            `https://accounts.google.com/o/oauth2/v2/auth?` +
+            `response_type=code&` +
+            `client_id=867350364877-4jq371ln9qmjtijqfe4tu53e2vrqlcbb.apps.googleusercontent.com&` +
+            `scope=openid%20profile%20email&` +
+            `redirect_uri=https%3A//localhost:50000/redirect/&` +
+            `state=${stateToken}0google&` +
+            `provider=google`
+
+            :
+
+            `https://accounts.google.com/o/oauth2/v2/auth?` +
+            `response_type=code&` +
+            `client_id=867350364877-4jq371ln9qmjtijqfe4tu53e2vrqlcbb.apps.googleusercontent.com&` +
+            `scope=openid%20profile%20email&` +
+            `redirect_uri=https%3A//grootmeetings.eastus.cloudapp.azure.com/redirect/&` +
+            `state=${stateToken}0google&` +
+            `provider=google`
+
     )
 }
 
 // ... URL for GitHub OAuth where user would be redirected to ... //
 export const githubAuthRedirect = (stateToken) => {
     return (
-        `https://github.com/login/oauth/authorize?` +
-        `client_id=53b6230eae9169cd8193&` +
-        `scope=user&` +
-        `redirect_uri=http%3A//localhost:50000/redirect/&` +
-        `state=${stateToken}0github&` +
-        `allow_signup=true`
+        isDev
+            ?
+
+            `https://github.com/login/oauth/authorize?` +
+            `client_id=53b6230eae9169cd8193&` +
+            `scope=user&` +
+            `redirect_uri=http%3A//localhost:50000/redirect/&` +
+            `state=${stateToken}0github&` +
+            `allow_signup=true`
+
+            :
+            
+            `https://github.com/login/oauth/authorize?` +
+            `client_id=53b6230eae9169cd8193&` +
+            `scope=user&` +
+            `redirect_uri=https%3A//grootmeetings.eastus.cloudapp.azure.com/redirect/&` +
+            `state=${stateToken}0github&` +
+            `allow_signup=true`
     )
 }
 
