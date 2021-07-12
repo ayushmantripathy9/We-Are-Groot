@@ -195,7 +195,6 @@ export default function Chat(props) {
                 >
                     Chat
                 </Paper>
-                <br />
                 <Paper className={classes.paper}>
 
                     <div className={classes.chatContainer}>
@@ -247,7 +246,7 @@ export default function Chat(props) {
                                                                 overflow: "hidden"
                                                             }}
                                                         >
-                                                            {moment(messageInfo.message.time_sent).format("LT")}
+                                                            {moment(messageInfo.message.time_sent).format("lll")}
                                                         </div>
                                                     </CardContent>
                                                 </Card>

@@ -3,28 +3,28 @@ import { useEffect, useRef, useState } from "react"
 import { connect } from "react-redux"
 import { apiWSCall, routeHome } from "../../urls"
 
+import {
+    Button
+} from "@material-ui/core"
+
+// icons used
 import MicIcon from '@material-ui/icons/Mic'
-import MicOffIcon from '@material-ui/icons/MicOff'
 import VideocamIcon from '@material-ui/icons/Videocam'
-import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import AlbumIcon from '@material-ui/icons/Album';
 
 import {
-    Button
-} from "@material-ui/core"
-
-
-import {
     ANSWER,
-    CALL_CONNECTED,
+    CALL_CONNECTED, 
     ICE_CANDIDATE,
     OFFER,
     PARTICIPANT_LEFT
 } from "./messageTypes/signalling"
 
 import Videos from "./videos"
+
+const moment = require("moment")
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,6 +65,7 @@ function VideoCall(props) {
     const [initialStream, setInitialStream] = useState(false)
 
     const [recording, setRecording] = useState(false)
+    const screenRecorder = useRef()
 
     const callWebSocket = useRef()
 
@@ -95,7 +96,7 @@ function VideoCall(props) {
 
         switch (type) {
             case CALL_CONNECTED:
-                navigator.mediaDevices.getUserMedia({ video: true, audio: {echoCancellation: true} }).then(stream => {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: { echoCancellation: true } }).then(stream => {
                     myStreamRef.current = stream
                     setUserStreams(streams => {
                         return {
@@ -364,10 +365,67 @@ function VideoCall(props) {
         navigator.clipboard.writeText(props.RoomInfo.room_code)
     }
 
-    function handleScreenRecord(){
-        setRecording(prev=>{
-            return !prev
-        })
+    function downloadBlob(blob, name = `groot-recording(room-${props.RoomInfo.room_name})-${moment().format('lll')}.mp4`) {
+        if (
+            window.navigator &&
+            window.navigator.msSaveOrOpenBlob
+        ) return window.navigator.msSaveOrOpenBlob(blob);
+
+        const data = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = data;
+        link.download = name;
+
+
+        link.dispatchEvent(
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            })
+        );
+
+        setTimeout(() => {
+            // For Firefox it is necessary to delay revoking the ObjectURL
+            window.URL.revokeObjectURL(data);
+            link.remove();
+        }, 100);
+    }
+
+    function handleScreenRecord() {
+        if (!recording) {
+            navigator.mediaDevices.getDisplayMedia({
+                video: {
+                    mediaSource: "screen",
+                    cursor: "always"
+                },
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            }).then(stream => {
+                screenRecorder.current = new MediaRecorder(stream)
+                const chunks = []
+                screenRecorder.current.ondataavailable = event => chunks.push(event.data)
+                screenRecorder.current.onstop = event => {
+                    const mediaBlob = new Blob(chunks, { type: chunks[0].type })
+                    downloadBlob(mediaBlob)
+                }
+                screenRecorder.current.start()
+            }).then(() => {
+                setRecording(prev => {
+                    return !prev
+                })
+            })
+        }
+        else {
+            screenRecorder.current.stop()
+            setRecording(prev => {
+                return !prev
+            })
+        }
     }
 
 
@@ -383,14 +441,14 @@ function VideoCall(props) {
 
                 <div>
                     <Button
-                        startIcon={videoState ? <VideocamIcon /> : <VideocamIcon style={{color:"red"}} />}
+                        startIcon={videoState ? <VideocamIcon /> : <VideocamIcon style={{ color: "red" }} />}
                         color="secondary"
                         onClick={toggleVideo}
                     />
 
 
                     <Button
-                        startIcon={audioState ? <MicIcon /> : <MicIcon style={{color:"red"}}/>}
+                        startIcon={audioState ? <MicIcon /> : <MicIcon style={{ color: "red" }} />}
                         color="secondary"
                         onClick={toggleAudio}
                     />
@@ -398,12 +456,14 @@ function VideoCall(props) {
                     <Button
                         color="secondary"
                         onClick={handleScreenRecord}
-                        startIcon={!recording? <AlbumIcon />: <AlbumIcon style={{ color:"red"}} />}
+                        startIcon={!recording ? <AlbumIcon style={{ color: "green" }} /> : <AlbumIcon style={{ color: "red" }} />}
+                        title={!recording ? "Start Recording" : "Stop Recording"}
                     />
                     <Button
-                        startIcon={<ExitToAppIcon style={{color:"red"}}/>}
+                        startIcon={<ExitToAppIcon style={{ color: "red" }} />}
                         color="secondary"
                         onClick={leaveRoom}
+                        title="Leave Room"
                     />
                 </div>
                 <div className={classes.joiningInfo}>

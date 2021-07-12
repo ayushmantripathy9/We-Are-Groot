@@ -54,7 +54,7 @@ function NavBarTop() {
     const dispatch = useDispatch()
 
     const [themeState, setThemeState] = useState(false)
-    const icon = !themeState ? <Brightness7Icon style={{color:"yellow"}}/> : <Brightness3Icon style={{color:"#a10e00"}}/>
+    const icon = !themeState ? <Brightness7Icon style={{color:"yellow"}}/> : <Brightness3Icon style={{color:"red"}}/>
 
     const [anchorEl, setAnchorEl] = useState(null)
     const handleAvatarClick = (event) => {
@@ -79,7 +79,12 @@ function NavBarTop() {
         return (
             <div className={classes.root}>
                 <CssBaseline />
-                <AppBar position="static">
+                <AppBar 
+                    position="static"
+                    style={{
+                        background:"black"
+                    }}
+                >
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
                             Groot
