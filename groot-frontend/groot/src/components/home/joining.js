@@ -18,12 +18,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { createRoom, joinRoom } from "../../actions/room"
 import { Redirect } from "react-router-dom"
 
-import groot_logo from "./../auth/media/groot_landing_logo.png"
+import groot_logo from "./../auth/media/groot_hi.gif"
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "grid",
-        gridTemplateColumns: "2fr 5fr 2fr"
+        gridTemplateColumns: "2fr 5fr 2fr",
+        paddingLeft:"5rem"
     },
     controls: {
         display: "flex",
@@ -204,13 +205,20 @@ export default function Joining(props) {
                 <div className={classes.logo}>
                     <Card
                         className={classes.card}
+                        style={{
+                            display:"flex",
+                            justifyContent:"center",
+                            alignItems:"center",
+                            backgroundColor: "black"
+                        }}
                     >
                         <CardMedia
                             style={{ height: 200, width: 150, paddingTop: '56.25%' }}
                             image={groot_logo}
                             title="Groot"
+                            justifyContent="center"
                         />
-                        <CardContent alignItems="center" >
+                        <CardContent alignItems="center" justifyContent="center" >
                             <i>Let's Explore Meetings</i>
                         </CardContent>
 

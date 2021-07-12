@@ -32,13 +32,16 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: "1rem",
         paddingLeft: "1rem",
         paddingBottom: "0.5rem",
+        backgroundColor: "black"
     },
     paper: {
         height: "100%",
         paddingTop: "1rem",
-        paddingLeft: "1rem",
+        paddingLeft: "1.2rem",
+        paddingRight: "0.4rem",
         paddingBottom: "1rem",
         overflow: "hidden",
+        backgroundColor: "black"
 
     },
     chatContainer: {
@@ -185,7 +188,9 @@ export default function Chat(props) {
                     style={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center"
+                        justifyContent: "center",
+                        fontSize: "20px",
+                        color: "lightblue"
                     }}
                 >
                     Chat

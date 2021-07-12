@@ -54,7 +54,7 @@ function NavBarTop() {
     const dispatch = useDispatch()
 
     const [themeState, setThemeState] = useState(false)
-    const icon = !themeState ? <Brightness7Icon /> : <Brightness3Icon />
+    const icon = !themeState ? <Brightness7Icon style={{color:"yellow"}}/> : <Brightness3Icon style={{color:"#a10e00"}}/>
 
     const [anchorEl, setAnchorEl] = useState(null)
     const handleAvatarClick = (event) => {

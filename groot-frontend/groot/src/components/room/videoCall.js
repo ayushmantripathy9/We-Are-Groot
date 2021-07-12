@@ -9,6 +9,7 @@ import VideocamIcon from '@material-ui/icons/Videocam'
 import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
+import AlbumIcon from '@material-ui/icons/Album';
 
 import {
     Button
@@ -62,6 +63,8 @@ function VideoCall(props) {
     const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users
     const myStreamRef = useRef()
     const [initialStream, setInitialStream] = useState(false)
+
+    const [recording, setRecording] = useState(false)
 
     const callWebSocket = useRef()
 
@@ -360,6 +363,14 @@ function VideoCall(props) {
     function handleCopyJoiningInfo() {
         navigator.clipboard.writeText(props.RoomInfo.room_code)
     }
+
+    function handleScreenRecord(){
+        setRecording(prev=>{
+            return !prev
+        })
+    }
+
+
     return (
         <div className={classes.root}>
 
@@ -372,20 +383,25 @@ function VideoCall(props) {
 
                 <div>
                     <Button
-                        startIcon={videoState ? <VideocamIcon /> : <VideocamOffIcon />}
+                        startIcon={videoState ? <VideocamIcon /> : <VideocamIcon style={{color:"red"}} />}
                         color="secondary"
                         onClick={toggleVideo}
                     />
 
 
                     <Button
-                        startIcon={audioState ? <MicIcon /> : <MicOffIcon />}
+                        startIcon={audioState ? <MicIcon /> : <MicIcon style={{color:"red"}}/>}
                         color="secondary"
                         onClick={toggleAudio}
                     />
 
                     <Button
-                        startIcon={<ExitToAppIcon />}
+                        color="secondary"
+                        onClick={handleScreenRecord}
+                        startIcon={!recording? <AlbumIcon />: <AlbumIcon style={{ color:"red"}} />}
+                    />
+                    <Button
+                        startIcon={<ExitToAppIcon style={{color:"red"}}/>}
                         color="secondary"
                         onClick={leaveRoom}
                     />

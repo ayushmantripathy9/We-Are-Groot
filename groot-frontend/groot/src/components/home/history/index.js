@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center",
         paddingTop: "2rem",
         paddingLeft: "1rem",
-        paddingRight: "1rem"
+        paddingRight: "1.5rem"
     },
     roomCard: {
         marginBottom: "1rem",
@@ -50,7 +50,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         paddingTop: "2rem",
-        
+        paddingLeft: "1rem",
+        paddingRight: "1.5rem"
+
     },
     participantCard: {
         marginBottom: "1rem",
@@ -110,33 +112,56 @@ export default function History(props) {
         <div className={classes.root}>
 
             <CssBaseline />
-            <Paper className={classes.paper} elevation={7}>
-                <div className={classes.participants}>
-                    {
-                        roomParticipants.map(participant => {
-                            return (
-                                <Card
-                                    className={classes.participantCard}
-                                >
-                                    <CardHeader
-                                        title={participant.name}
-                                        avatar={
-                                            <Avatar src={participant.profile_pic} className={classes.avatar}>
-                                            </Avatar>
-                                        }
-                                    />
-                                    <CardContent>
-                                        Username: {participant.username}
-                                    </CardContent>
-                                </Card>
-                            )
-                        })
+            <Paper className={classes.paper} elevation={7} style={{ backgroundColor: "black" }}>
+                <Scrollbars
+                    style={
+                        {
+                            height: "100%",
+                            overflow: "hidden"
+                        }
                     }
+                >
 
-                </div>
+                    <Card
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            backgroundColor: "black",
+                            color: "lightblue",
+                            fontSize: "25px",
+                            paddingTop: "1.5rem"
+                        }}
+                    >
+                        Participants
+                    </Card>
+                    <div className={classes.participants}>
+                        {
+                            roomParticipants.map(participant => {
+                                return (
+                                    <Card
+                                        className={classes.participantCard}
+                                    >
+                                        <CardHeader
+                                            title={participant.name}
+                                            avatar={
+                                                <Avatar src={participant.profile_pic} className={classes.avatar}>
+                                                </Avatar>
+                                            }
+                                        />
+                                        <CardContent>
+                                            Username: {participant.username}
+                                        </CardContent>
+                                    </Card>
+                                )
+                            })
+                        }
+
+                    </div>
+                </Scrollbars>
             </Paper>
 
-            <Paper className={classes.paper} elevation={7} >
+            <Paper className={classes.paper} elevation={7} style={{ backgroundColor: "black" }} >
                 {roomsDone && <ChatHistory room_code={currentRoomCode} room_name={currentRoomName} />}
             </Paper>
 
@@ -157,8 +182,10 @@ export default function History(props) {
                                         onClick={() => changeRoom(roomInfo.room_name, roomInfo.room_code, roomInfo.participants_history)}
                                         className={classes.roomCard}
                                         style={{
-                                            color: currentRoomCode == roomInfo.room_code ? "lightblue" : "white",
-                                            borderBlockColor: "red"
+                                            color: currentRoomCode == roomInfo.room_code ? "yellow" : "white",
+                                            borderColor: "red",
+                                            borderRadius: "3",
+                                            backgroundColor: "black"
                                         }}
                                     >
                                         <CardHeader

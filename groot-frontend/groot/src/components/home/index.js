@@ -98,7 +98,8 @@ function Home(props) {
                         >
                             <AddCircleIcon
                                 style={{
-                                    fontSize: "28px"
+                                    fontSize: "28px",
+                                    color: !showHistory?"yellow":"white"
                                 }}
                             />
                         </Button>
@@ -110,7 +111,8 @@ function Home(props) {
                         >
                             <HistoryIcon
                                 style={{
-                                    fontSize: "28px"
+                                    fontSize: "28px",
+                                    color: showHistory?"yellow":"white"
                                 }}
                             />
                         </Button>
@@ -124,7 +126,8 @@ function Home(props) {
                         >
                             <ExitToAppIcon
                                 style={{
-                                    fontSize: "28px"
+                                    fontSize: "28px",
+                                    color: "red"
                                 }}
                             />
                         </Button>

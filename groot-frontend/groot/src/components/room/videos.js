@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "1rem",
         paddingBottom: "0.4rem",
         paddingRight: "0.7rem",
-        paddingLeft: "0.7rem"
+        paddingLeft: "0.7rem",
+        backgroundColor: "black"
     },
     cardContent: {
         display: "flex",

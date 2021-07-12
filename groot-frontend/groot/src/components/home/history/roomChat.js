@@ -36,8 +36,9 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         height: "100%",
         paddingTop: "1rem",
-        paddingLeft: "1rem",
+        paddingLeft: "1.2rem",
         paddingBottom: "1rem",
+        paddingRight: "0.5rem"
 
     },
     chatContainer: {
@@ -148,10 +149,21 @@ export default function ChatHistory(props) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: "20px"
+                        fontSize: "30px",
+                    }}
+                >   
+                <Card
+                    style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        backgroundColor: "black",
+                        color: "lightblue"
                     }}
                 >
-                    <i>{ ` ${props.room_name}`}</i> 
+
+                   <i>{ ` ${props.room_name}`}</i>
+                </Card>
                     <br/>
                 </div>
                 <div className={classes.paper}>
@@ -170,8 +182,26 @@ export default function ChatHistory(props) {
                                     style={{
                                         overflow: "hidden"
                                     }}
-                                >
+                                >   
                                     {
+                                        chatMessages.length === 0 
+                                            ? 
+                                                <div 
+                                                    style={{
+                                                        marginTop:"4rem",
+                                                        display: "flex",
+                                                        justifyContent:"center",
+                                                        alignItems: "center"
+                                                    }}
+                                                >
+                                                    No chat messages were sent...
+                                                </div> 
+                                            
+                                            : 
+                                                <div></div>
+                                    }
+                                    {   
+
                                         chatMessages.map(messageInfo => {
                                             return (
                                                 <Card className={classes.messageCard}>
