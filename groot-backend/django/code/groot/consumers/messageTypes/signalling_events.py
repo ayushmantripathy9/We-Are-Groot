@@ -9,3 +9,6 @@ specific_user_messages = [
     OFFER,
     ANSWER
 ]
+
+VIDEO_OFF = 'VIDEO_OFF'
+AUDIO_OFF = 'AUDIO_OFF'

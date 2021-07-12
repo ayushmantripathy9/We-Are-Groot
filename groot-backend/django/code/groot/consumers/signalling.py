@@ -80,6 +80,17 @@ class SignallingConsumer(WebsocketConsumer):
                     'message': message_data
                 }
             )
+        else:
+            async_to_sync(self.channel_layer.group_send)(
+                self.call_group_name,
+                {
+                    'type': "send_message_to_all",
+                    'message': {
+                        'type': type,
+                        'data': data
+                    }
+                }
+            )
     
 
     def send_message_to_all(self, event):

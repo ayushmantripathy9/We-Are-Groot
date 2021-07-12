@@ -39,18 +39,23 @@ function Videos(props) {
         Object.keys(props.RoomInfo.participants).forEach(id => {
             if (props.userStreams[id]) {
                 const videoElement = document.getElementById(`video-${id}`)
-                const tracks = props.userStreams[id].getTracks()
+                const videoTracks = props.userStreams[id].getVideoTracks()
+                const audioTracks = props.userStreams[id].getAudioTracks()
 
-                if (tracks.length > 0 && !!videoElement) {
+                console.log("lengths", videoTracks.length, audioTracks.length)
+                if 
+                (
+                    (videoTracks.length > 0 || audioTracks.length > 0) && videoElement
+                ) {
                     videoElement.srcObject = props.userStreams[id]
                 }
                 else {
-                    console.log("Tracks not found 1 ", props.RoomInfo.participants[id].name)
+                    console.log("Tracks not found", props.RoomInfo.participants[id].name)
                     videoElement.srcObject = null
                 }
             }
             else {
-                console.log("Tracks not found 2 ", props.RoomInfo.participants[id].name)
+                console.log("Stream not found", props.RoomInfo.participants[id].name)
                 const videoElement = document.getElementById(`video-${id}`)
                 videoElement.srcObject = null
             }

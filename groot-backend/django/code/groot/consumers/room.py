@@ -22,12 +22,12 @@ class RoomConsumer(WebsocketConsumer):
             room = Room.objects.get(room_code=self.room_code)
             self.room = room
 
+            self.accept()
+
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name, 
                 self.channel_name
             )
-
-            self.accept()
 
             room_participants = UserGetSerializer(room.participants.all(), many=True).data
 
