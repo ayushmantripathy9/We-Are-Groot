@@ -195,7 +195,6 @@ export default function Chat(props) {
                 >
                     Chat
                 </Paper>
-                <br />
                 <Paper className={classes.paper}>
 
                     <div className={classes.chatContainer}>

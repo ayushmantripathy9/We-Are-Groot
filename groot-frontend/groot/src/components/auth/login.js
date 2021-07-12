@@ -32,10 +32,10 @@ const handleGoogleLogin = () => {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: "91.55vh",
+        height: "92.25vh",
         alignItems: "center",
         justifyContent: "center",
-        paddingRight: "1.5rem",
+        paddingRight: "1rem",
         paddingTop: "1rem",
     },
     illustrationContainer: {
@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "center",
         alignContent: "space-around",
+        backgroundColor: "black"
     },
     card: {
         maxWidth: 345,
@@ -58,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center",
         backgroundColor: "transparent",
     },
+    main:{
+        paddingTop:"0.5rem"
+    }
 
 
 }))
@@ -72,7 +76,7 @@ export default function Login() {
     }, [])
 
     return (
-            <div>
+            <div className={classes.main}>
                 <Grid container component='main' className={classes.root}>
                     <CssBaseline />
                     <Grid
