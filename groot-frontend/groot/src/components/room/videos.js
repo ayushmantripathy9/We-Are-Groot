@@ -45,12 +45,10 @@ function Videos(props) {
                     videoElement.srcObject = props.userStreams[id]
                 }
                 else {
-                    console.log("Tracks not found 1 ", props.RoomInfo.participants[id].name)
                     videoElement.srcObject = null
                 }
             }
             else {
-                console.log("Tracks not found 2 ", props.RoomInfo.participants[id].name)
                 const videoElement = document.getElementById(`video-${id}`)
                 videoElement.srcObject = null
             }

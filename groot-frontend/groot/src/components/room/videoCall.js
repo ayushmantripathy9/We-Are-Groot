@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-between",
         alignItems: "flex-end"
     },
-    joiningInfo:{
-        paddingRight:"2rem",
+    joiningInfo: {
+        paddingRight: "2rem",
     },
     button: {
         margin: theme.spacing(0.5),
@@ -52,14 +52,16 @@ const useStyles = makeStyles((theme) => ({
 function VideoCall(props) {
 
     const UserData = props.UserInfo.data
-    const [audioState, setAudioState] = useState(false)
-    const [videoState, setVideoState] = useState(false)
+    const [audioState, setAudioState] = useState(true)
+    const [videoState, setVideoState] = useState(true)
 
     const peerConnections = useRef({})  // all the peer-connections for sharing video and audio to all users
     const videoStreamSent = useRef({})
     const audioStreamSent = useRef({})
 
-    const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users 
+    const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users
+    const myStreamRef = useRef()
+    const [initialStream, setInitialStream] = useState(false)
 
     const callWebSocket = useRef()
 
@@ -71,132 +73,17 @@ function VideoCall(props) {
             const message = JSON.parse(event.data)
             handleWebSocketMessage(message)
         }
+
     }, [])
 
     function toggleAudio() {
-        if (audioState) {
-            let my_stream = userStreams[UserData.id]
-
-            if (my_stream) {
-                Object.keys(peerConnections.current).forEach(id => {
-                    if (id === UserData.id)
-                        return
-
-                    peerConnections.current[id].removeTrack(audioStreamSent.current[id])
-                    audioStreamSent.current[id] = null
-
-                })
-
-                my_stream.getAudioTracks().forEach(audioTrack => {
-                    audioTrack.stop()
-                    my_stream.removeTrack(audioTrack)
-                })
-
-            }
-
-            setUserStreams(currentStreams => {
-                return {
-                    ...currentStreams,
-                    [UserData.id]: my_stream
-                }
-            })
-            setAudioState(false)
-        }
-        else {
-            let my_stream = userStreams[UserData.id]
-
-            if (!my_stream)
-                my_stream = new MediaStream()
-
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-
-                    const audioStreamTracks = stream.getAudioTracks()
-                    my_stream.addTrack(audioStreamTracks[0])
-
-                    Object.keys(peerConnections.current).forEach(id => {
-                        if (id === UserData.id)
-                            return
-
-                        if (!audioStreamSent.current[id])
-                            audioStreamSent.current[id] = peerConnections.current[id].addTrack(audioStreamTracks[0], stream)
-                    })
-
-                    setUserStreams(currentStreams => {
-                        return {
-                            ...currentStreams,
-                            [UserData.id]: my_stream
-                        }
-                    })
-                    setAudioState(true)
-                })
-        }
+        myStreamRef.current.getAudioTracks()[0].enabled = !audioState
+        setAudioState(prev => { return !prev })
     }
 
     function toggleVideo() {
-        if (videoState) {
-            let my_stream = userStreams[UserData.id]
-            if (my_stream) {
-
-                Object.keys(peerConnections.current).forEach(id => {
-                    if (id === UserData.id)
-                        return
-
-                    if (videoStreamSent.current[id])
-                        peerConnections.current[id].removeTrack(videoStreamSent.current[id])
-
-                    videoStreamSent.current[id] = null
-
-                })
-
-                my_stream.getVideoTracks().forEach(videoTrack => {
-                    videoTrack.stop()
-                    my_stream.removeTrack(videoTrack)
-                })
-
-            }
-
-            setUserStreams(currentStreams => {
-                return {
-                    ...currentStreams,
-                    [UserData.id]: my_stream
-                }
-            })
-
-            setVideoState(false)
-        }
-        else {
-            let my_stream = userStreams[UserData.id]
-            if (!my_stream)
-                my_stream = new MediaStream()
-
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-
-                    const videoStreamTracks = stream.getVideoTracks()
-                    my_stream.addTrack(videoStreamTracks[0])
-
-                    Object.keys(peerConnections.current).forEach(id => {
-                        if (id === UserData.id)
-                            return
-
-                        if (!videoStreamSent.current[id]) {
-                            peerConnections.current[id].getSenders().forEach(sender => {
-                                peerConnections.current[id].removeTrack(sender)
-                            })
-                            videoStreamSent.current[id] = peerConnections.current[id].addTrack(videoStreamTracks[0], stream)
-                        }
-                    })
-
-                    setUserStreams(currentStreams => {
-                        return {
-                            ...currentStreams,
-                            [UserData.id]: my_stream
-                        }
-                    })
-                    setVideoState(true)
-                })
-        }
+        myStreamRef.current.getVideoTracks()[0].enabled = !videoState
+        setVideoState(prev => { return !prev })
     }
 
     function handleWebSocketMessage(message) {
@@ -205,7 +92,18 @@ function VideoCall(props) {
 
         switch (type) {
             case CALL_CONNECTED:
-                callPeers(data)
+                navigator.mediaDevices.getUserMedia({ video: true, audio: {echoCancellation: true} }).then(stream => {
+                    myStreamRef.current = stream
+                    setUserStreams(streams => {
+                        return {
+                            ...streams,
+                            [UserData.id]: stream
+                        }
+                    })
+                }).then(() => {
+                    setInitialStream(true)
+                    callPeers(data)
+                })
                 break
 
             case OFFER:
@@ -229,7 +127,10 @@ function VideoCall(props) {
                 delete new_vc_dict[data.id]
                 videoStreamSent.current = new_vc_dict
 
-                console.log("New Peer Connections State", peerConnections.current)
+                let new_ac_dict = audioStreamSent.current
+                delete new_ac_dict[data.id]
+                audioStreamSent.current = new_ac_dict
+
                 break
 
             default:
@@ -286,25 +187,9 @@ function VideoCall(props) {
             if (!peerConnections.current[peer.id])
                 peerConnections.current[peer.id] = createPeer(peer.id)
 
-            peerConnections.current[peer.id]
-                .createOffer(offerRequests)
-                .then(offer => {
-                    return peerConnections.current[peer.id].setLocalDescription(offer)
-                })
-                .then(() => {
-                    sendWebSocketMessage({
-                        type: "OFFER",
-                        message: {
-                            targetID: peer.id,
-                            senderID: UserData.id,
-                            sdp: peerConnections.current[peer.id].localDescription
-                        }
-                    })
-                })
-                .catch(error => {
-                    console.log("Error occurred while calling peer :", peer.id, "\n Error : ", error)
-                })
-
+            myStreamRef.current.getTracks().forEach(track => {
+                peerConnections.current[peer.id].addTrack(track, myStreamRef.current)
+            })
         })
     }
 
@@ -348,17 +233,10 @@ function VideoCall(props) {
 
     function handleTrackEvent(targetID) {
         return event => {
-            let participantStream = userStreams[targetID]
-
-            if (!participantStream)
-                participantStream = new MediaStream()
-
-            participantStream.addTrack(event.track)
-
             setUserStreams(currentStreams => {
                 return {
                     ...currentStreams,
-                    [targetID]: participantStream
+                    [targetID]: event.streams[0]
                 }
             })
         }
@@ -366,6 +244,7 @@ function VideoCall(props) {
 
     function handleRemoveStreamEvent(targetID) {
         return event => {
+            myStreamRef.current = event.stream
             setUserStreams(currentStreams => {
                 return {
                     ...currentStreams,
@@ -409,7 +288,7 @@ function VideoCall(props) {
         peerConnections.current[senderID]
             .setRemoteDescription(description)
             .then(() => {
-                const my_stream = document.getElementById(`video-${UserData.id}`).srcObject
+                const my_stream = myStreamRef.current
                 if (my_stream) {
                     if (!audioStreamSent.current[senderID]) {
                         const audioStreamTracks = my_stream.getAudioTracks()
@@ -485,7 +364,7 @@ function VideoCall(props) {
         <div className={classes.root}>
 
             <div className={classes.videos}>
-                <Videos userStreams={userStreams} />
+                {initialStream && <Videos userStreams={userStreams} />}
 
             </div>
 
@@ -516,7 +395,7 @@ function VideoCall(props) {
                         color="default"
                         endIcon={<FileCopyIcon />}
                         style={{
-                            backgroundColor:"green",
+                            backgroundColor: "green",
                             padding: "0.6rem",
                             textTransform: 'none'
                         }}
