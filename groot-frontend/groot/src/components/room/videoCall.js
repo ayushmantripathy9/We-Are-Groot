@@ -48,6 +48,16 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         margin: theme.spacing(0.5),
+    },
+    '@keyframes blinker': {
+        from: { opacity: 1 },
+        to: { opacity: 0 },
+    },
+    blinking: {
+        animationName: '$blinker',
+        animationDuration: '1s',
+        animationTimingFunction: 'linear',
+        animationIterationCount: 'infinite',
     }
 
 }))
@@ -543,7 +553,7 @@ function VideoCall(props) {
                     <Button
                         color="secondary"
                         onClick={handleScreenRecord}
-                        startIcon={!recording ? <AlbumIcon style={{ color: "green" }} /> : <AlbumIcon style={{ color: "red" }} />}
+                        startIcon={!recording ? <AlbumIcon style={{ color: "" }} /> : <AlbumIcon className={classes.blinking} style={{ color: "red" }} />}
                         title={!recording ? "Start Recording" : "Stop Recording"}
                     />
                     <Button
