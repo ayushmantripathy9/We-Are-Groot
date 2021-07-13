@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+/**
+ * An Intermediate Component which is rendered when the user waits for Login
+ * @returns {Component} Circular Progress to show login being verified
+ */
 export default function VerifyLogin() {
     const [invalidToken, setInvalidToken] = useState(true)
     const [verificationStatus, setVerificationStatus] = useState(false)
@@ -33,6 +37,10 @@ export default function VerifyLogin() {
 
     const classes = useStyles()
 
+    /*
+        The state token and the auth code are retrieved from the URL
+        Then login request is made to the backend
+    */
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
 
