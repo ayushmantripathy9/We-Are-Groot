@@ -86,6 +86,7 @@ function VideoCall(props) {
 
     const [recording, setRecording] = useState(false)   // represents whether the user is recording or not
     const screenRecorder = useRef()                     // ref that contains the screen-recorder utility
+    const screenStream = useRef()                       // utility to stop the stop screen sharing after recording is over
 
     const callWebSocket = useRef()      // the Call WebSocket to handle sending and receiving of all WS messages
 
@@ -504,6 +505,8 @@ function VideoCall(props) {
                 }
             }).then(stream => {
                 screenRecorder.current = new MediaRecorder(stream)
+                screenStream.current = stream
+
                 const chunks = []
                 screenRecorder.current.ondataavailable = event => chunks.push(event.data)
                 screenRecorder.current.onstop = event => {
@@ -515,10 +518,13 @@ function VideoCall(props) {
                 setRecording(prev => {
                     return !prev
                 })
+            }).catch(()=>{
+                return
             })
         }
         else {
             screenRecorder.current.stop()
+            screenStream.current.getTracks().forEach(track => track.stop())
             setRecording(prev => {
                 return !prev
             })
