@@ -5,6 +5,7 @@ import {
 
 } from '@material-ui/core'
 
+// imports for the icons used
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import HistoryIcon from '@material-ui/icons/History'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
@@ -16,6 +17,7 @@ import Joining from "./joining"
 import { useDispatch } from 'react-redux'
 import { userLogout } from '../../actions/user'
 
+// CSS for the Home Component
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "calc(100vh - 48px)",
@@ -44,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         justifyContent: "flex-start"
     },
-    logout:{
+    logout: {
         gridRow: "3/3",
         display: "flex",
         flexDirection: "column"
     },
     room: {
-        gridColumn:"2/2",
+        gridColumn: "2/2",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -61,22 +63,38 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function Home(props) {
+/**
+ * The Home Component
+ * @returns {Component}  Home component
+ * 
+ * The home component has:
+ *  - The left-nav bar
+ *  - Joining Component or the RoomHistory Component (depending on the selected state)
+ */
+function Home() {
 
     const classes = useStyles()
-    const [showHistory, setShowHistory] = useState(false)
+    const [showHistory, setShowHistory] = useState(false)   // determines whether to show the Joining Component or the History Component
 
     const dispatch = useDispatch()
 
+    /**
+     * - Sets showHistory to false
+     * - Shows the Joining Component
+     */
     function handleHomeClick() {
         setShowHistory(false)
     }
 
+    /**
+     * - Sets showHistory to true
+     * - Shows the History Component
+     */
     function handleHistoryClick() {
         setShowHistory(true)
     }
 
-    function handleLogoutClick(){
+    function handleLogoutClick() {
         dispatch(userLogout())
     }
 
@@ -99,7 +117,7 @@ function Home(props) {
                             <AddCircleIcon
                                 style={{
                                     fontSize: "28px",
-                                    color: !showHistory?"yellow":"white"
+                                    color: !showHistory ? "yellow" : "white"
                                 }}
                             />
                         </Button>
@@ -112,7 +130,7 @@ function Home(props) {
                             <HistoryIcon
                                 style={{
                                     fontSize: "28px",
-                                    color: showHistory?"yellow":"white"
+                                    color: showHistory ? "yellow" : "white"
                                 }}
                             />
                         </Button>

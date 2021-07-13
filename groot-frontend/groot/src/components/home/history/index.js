@@ -14,7 +14,9 @@ import { apiRoomHistory } from "../../../urls"
 import ChatHistory from "./roomChat"
 
 import Scrollbars from 'react-custom-scrollbars'
+import { Component } from "react"
 
+// CSS for the History component
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "grid",
@@ -66,7 +68,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-
+/**
+ * Room History Component that contains the participants and chat history of all created and joined rooms
+ * @param {*} props 
+ * @returns {Component} the Room History Component
+ */
 export default function History(props) {
     const classes = useStyles()
 
@@ -74,10 +80,9 @@ export default function History(props) {
     const [currentRoomName, setRoomName] = useState('')
     const [currentRoomCode, setRoomCode] = useState('')
     const [roomParticipants, setRoomParticipants] = useState([])
-    const [roomsDone, setRoomsDone] = useState(false)
 
-    let roomsRes = []
-
+    const [roomsDone, setRoomsDone] = useState(false)   // denotes whether the rooms have been fetched successfully or not
+    let roomsRes = []                                   // all the rooms which the user was ever a part of 
 
     useEffect(() => {
         axios.get(
@@ -101,6 +106,12 @@ export default function History(props) {
 
     }, [])
 
+    /**
+     * Handles the change of room when user selects a different room than current
+     * @param {string} roomName the room name
+     * @param {string} roomCode the room code
+     * @param {Array} roomParticipants participants that were a part of the room
+     */
     const changeRoom = (roomName, roomCode, roomParticipants) => {
         setRoomName(roomName)
         setRoomCode(roomCode)
