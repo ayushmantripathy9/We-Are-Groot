@@ -225,7 +225,7 @@ export default function ChatHistory(props) {
                                                                 overflow: "hidden"
                                                             }}
                                                         >
-                                                            {moment(messageInfo.message.time_sent).format("LT")}
+                                                            {moment(messageInfo.message.time_sent).format("lll")}
                                                         </div>
                                                     </CardContent>
                                                 </Card>
