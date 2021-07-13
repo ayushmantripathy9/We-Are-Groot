@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
 import { apiRoomCreate, apiRoomJoin } from '../urls'
 
 import { 
@@ -9,7 +8,13 @@ import {
     UPDATE_PARTICIPANTS 
 } from './types'
 
-
+/**
+ * Creates a room having the given name
+ * @param {string} room_name name of the room
+ * @returns a dispatch method to update the redux store's roomInfo
+ * 
+ * Makes a request to the room view in the backend and based on response creates the room
+ */
 export const createRoom = (room_name) => {
 
     return dispatch => {
@@ -39,6 +44,13 @@ export const createRoom = (room_name) => {
     }    
 }
 
+/**
+ * Makes the user join a room with given code, if it exists
+ * @param {string} room_code the room code
+ * @returns a dispatch method to update the redux store's roomInfo
+ * 
+ * Makes a request to the room join view in the backend and based on response joins the room
+ */
 export const joinRoom = (room_code) => {
     return dispatch => {
 
@@ -67,7 +79,11 @@ export const joinRoom = (room_code) => {
     }
 }
 
-
+/**
+ * Initializes the participants of the room 
+ * @param {Array} participants the participants array
+ * @returns a dispatch method to initialize the participants field of the roomInfo in redux store
+ */
 export const initializePartipantsList = (participants) => {
     return dispatch => {
         dispatch({
@@ -79,6 +95,11 @@ export const initializePartipantsList = (participants) => {
     }
 }
 
+/**
+ * Adds a new participant to the room 
+ * @param {Object} participant room participant
+ * @returns a dispatch method to update the participants field of the roomInfo in redux store by adding the new participant 
+ */
 export const addNewParticipant = (participant) => {
     return dispatch => {
         dispatch({
@@ -90,6 +111,11 @@ export const addNewParticipant = (participant) => {
     }
 }
 
+/**
+ * Removes a participant from the room 
+ * @param {Object} participant room participant
+ * @returns a dispatch method to update the participants field of the roomInfo in redux store by removing the participant 
+ */
 export const participantLeave = (participant) => {
     return dispatch => {
         dispatch({

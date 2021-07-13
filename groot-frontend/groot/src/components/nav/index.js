@@ -19,7 +19,9 @@ import Brightness3Icon from "@material-ui/icons/Brightness3"
 import Brightness7Icon from "@material-ui/icons/Brightness7"
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { userLogout } from "../../actions/user"
+import { Component } from "react"
 
+// CSS fror the Nav Bar
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -47,7 +49,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-
+/**
+ * The Top NavBar component
+ * @returns {Component} The top nav-bar
+ * 
+ * The nav-bar type is determined by whether the user is logged in or not
+ */
 function NavBarTop() {
     const UserInfo = useSelector(state => state.userInfo)
     const classes = useStyles()

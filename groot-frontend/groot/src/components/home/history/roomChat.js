@@ -17,6 +17,7 @@ import { apiWSChat } from "../../../urls"
 
 const moment = require("moment")
 
+// CSS for the ChatHistory Component
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "calc(100vh - 80px)",
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
     chatRoot: {
         height: "100%",
-        display:"grid",
+        display: "grid",
         gridTemplateRows: "1fr 20fr"
     },
     chatHeader: {
@@ -52,16 +53,6 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: "0.8rem",
         paddingTop: "1rem",
     },
-    chatInput: {
-        height: "100%",
-        width: "100%",
-        paddingRight: "1rem",
-
-    },
-    chatMessageInput: {
-        width: "100%",
-
-    },
     messageCard: {
         paddingLeft: "1rem",
         paddingTop: "0.5rem",
@@ -80,17 +71,23 @@ const useStyles = makeStyles((theme) => ({
     },
     '@global': {
         '*::-webkit-scrollbar': {
-          width: '0.4em'
+            width: '0.4em'
         },
         '*::-webkit-scrollbar-track': {
-          '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+            '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
         },
         '*::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0,0,0,.9)',
-          outline: '1px solid slategrey'
+            backgroundColor: 'rgba(0,0,0,.9)',
+            outline: '1px solid slategrey'
         }
     }
 }))
+
+/**
+ * The Chat History of a Room
+ * @param { string } props room_name, room_code
+ * @returns The ChatHistory Component
+ */
 export default function ChatHistory(props) {
     const classes = useStyles()
 
@@ -102,10 +99,9 @@ export default function ChatHistory(props) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
-
     useEffect(() => {
         scrollToBottom()
-        if(props.room_code !== ''){
+        if (props.room_code !== '') {
 
             chatWebSocket.current = new WebSocket(apiWSChat(props.room_code))
             chatWebSocket.current.onmessage = event => {
@@ -118,14 +114,11 @@ export default function ChatHistory(props) {
 
     useEffect(() => {
         scrollToBottom()
-        console.log("Chat Messages: ", chatMessages)
     }, [chatMessages])
 
     function handleWebSocketMessage(message) {
         const type = message.type
         const data = message.data
-
-        console.log("Type: ", type, " \nData: ", data)
 
         switch (type) {
             case MESSAGES_SENT_BEFORE:
@@ -135,9 +128,6 @@ export default function ChatHistory(props) {
                 break
         }
     }
-
-
-
 
     return (
 
@@ -151,20 +141,20 @@ export default function ChatHistory(props) {
                         justifyContent: "center",
                         fontSize: "30px",
                     }}
-                >   
-                <Card
-                    style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent:"center",
-                        backgroundColor: "black",
-                        color: "lightblue"
-                    }}
                 >
+                    <Card
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            backgroundColor: "black",
+                            color: "lightblue"
+                        }}
+                    >
 
-                   <i>{ ` ${props.room_name}`}</i>
-                </Card>
-                    <br/>
+                        <i>{` ${props.room_name}`}</i>
+                    </Card>
+                    <br />
                 </div>
                 <div className={classes.paper}>
 
@@ -182,25 +172,25 @@ export default function ChatHistory(props) {
                                     style={{
                                         overflow: "hidden"
                                     }}
-                                >   
+                                >
                                     {
-                                        chatMessages.length === 0 
-                                            ? 
-                                                <div 
-                                                    style={{
-                                                        marginTop:"4rem",
-                                                        display: "flex",
-                                                        justifyContent:"center",
-                                                        alignItems: "center"
-                                                    }}
-                                                >
-                                                    No chat messages were sent...
-                                                </div> 
-                                            
-                                            : 
-                                                <div></div>
+                                        chatMessages.length === 0
+                                            ?
+                                            <div
+                                                style={{
+                                                    marginTop: "4rem",
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                No chat messages were sent...
+                                            </div>
+
+                                            :
+                                            <div></div>
                                     }
-                                    {   
+                                    {
 
                                         chatMessages.map(messageInfo => {
                                             return (

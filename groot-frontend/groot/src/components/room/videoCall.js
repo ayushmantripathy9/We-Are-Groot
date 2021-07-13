@@ -7,7 +7,7 @@ import {
     Button
 } from "@material-ui/core"
 
-// icons used
+// imports for the icons used
 import MicIcon from '@material-ui/icons/Mic'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
@@ -23,9 +23,11 @@ import {
 } from "./messageTypes/signalling"
 
 import Videos from "./videos"
+import { Component } from "react"
 
 const moment = require("moment")
 
+// CSS for the VideoCall Component
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "88.75vh",
@@ -46,28 +48,46 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         margin: theme.spacing(0.5),
+    },
+    '@keyframes blinker': {
+        from: { opacity: 1 },
+        to: { opacity: 0 },
+    },
+    blinking: {
+        animationName: '$blinker',
+        animationDuration: '1s',
+        animationTimingFunction: 'linear',
+        animationIterationCount: 'infinite',
     }
 
 }))
-
+/**
+ * The VideoCall Component
+ * @param props UserInfo, RoomInfo
+ * @returns {Component} VideoCall Component
+ * 
+ * The component contains:
+ *  - Videos Component
+ *  - Media Controls
+ */
 function VideoCall(props) {
 
-    const UserData = props.UserInfo.data
-    const [audioState, setAudioState] = useState(true)
-    const [videoState, setVideoState] = useState(true)
+    const UserData = props.UserInfo.data                // user-information
+    const [audioState, setAudioState] = useState(true)  // the current state of audio (true: on)
+    const [videoState, setVideoState] = useState(true)  // the current state of video (true: on)
 
     const peerConnections = useRef({})  // all the peer-connections for sharing video and audio to all users
-    const videoStreamSent = useRef({})
-    const audioStreamSent = useRef({})
+    const videoStreamSent = useRef({})  // contains the video-stream sent to each user
+    const audioStreamSent = useRef({})  // contains the audio-stream sent to each user
 
-    const [userStreams, setUserStreams] = useState({})    // would contain all the video streams of all users
-    const myStreamRef = useRef()
+    const [userStreams, setUserStreams] = useState({})    // contains all the video streams of all users
+    const myStreamRef = useRef()                          // this is a utility ref that stores user stream, to prevent state-loss on one stream (audio or video) change
     const [initialStream, setInitialStream] = useState(false)
 
-    const [recording, setRecording] = useState(false)
-    const screenRecorder = useRef()
+    const [recording, setRecording] = useState(false)   // represents whether the user is recording or not
+    const screenRecorder = useRef()                     // ref that contains the screen-recorder utility
 
-    const callWebSocket = useRef()
+    const callWebSocket = useRef()      // the Call WebSocket to handle sending and receiving of all WS messages
 
     const classes = useStyles()
 
@@ -80,16 +100,24 @@ function VideoCall(props) {
 
     }, [])
 
+    /**
+     * Toggles the current state of Audio
+     */
     function toggleAudio() {
         myStreamRef.current.getAudioTracks()[0].enabled = !audioState
         setAudioState(prev => { return !prev })
     }
-
+    /**
+     * Toggles the current state of Video
+     */
     function toggleVideo() {
         myStreamRef.current.getVideoTracks()[0].enabled = !videoState
         setVideoState(prev => { return !prev })
     }
-
+    /**
+     * Handles all messages coming via the Call Web-Socket
+     * @param {*} message The Web-Socket message after JSON parse
+     */
     function handleWebSocketMessage(message) {
         const type = message.type
         const data = message.data
@@ -141,7 +169,10 @@ function VideoCall(props) {
                 break
         }
     }
-
+    /**
+     * Sends message via the Call Web-Socket
+     * @param {*} message message to be sent via the Web-Socket
+     */
     function sendWebSocketMessage(message) {
         callWebSocket.current.send(JSON.stringify(message))
     }
@@ -177,7 +208,10 @@ function VideoCall(props) {
         }
 
     ]
-
+    /**
+     * Calls all the participants present in the room. Sets up peer-connections and adds own Media tracks to the same
+     * @param {*} peers List of all the peers in the room to call
+     */
     function callPeers(peers) {
         const offerRequests = {
             offerToReceiveAudio: 1,
@@ -197,6 +231,11 @@ function VideoCall(props) {
         })
     }
 
+    /**
+     * Creates peer-connection with the required user
+     * @param {*} targetID User with which the peer-connection is to be set up
+     * @returns peer-connection The peer-connection set-up with given peer
+     */
     function createPeer(targetID) {
 
         let peer_connection = new RTCPeerConnection({ iceServers })
@@ -211,6 +250,12 @@ function VideoCall(props) {
 
     //      FUNCTIONS FOR CREATING THE PEER CONNECTIONS     //
 
+    /**
+     * Handles the negotiation needed event that occurs in the peer-connection, triggered by the peer
+     * @param {*} peer_connection peer_connection with a specific user
+     * @param {*} targetID id of the user with which peer-connection is set up
+     * @returns event which handles the handleNegotiationNeededEvent
+     */
     function handleNegotiationNeededEvent(peer_connection, targetID) {
         const offerRequests = {
             offerToReceiveAudio: 1,
@@ -235,6 +280,11 @@ function VideoCall(props) {
         }
     }
 
+    /**
+     * Handles the OnTrack event which occurs whenever a track is received via the peer-connection
+     * @param {*} targetID User whose track change cause the event
+     * @returns event to handle the OnTrack event
+     */
     function handleTrackEvent(targetID) {
         return event => {
             setUserStreams(currentStreams => {
@@ -245,7 +295,11 @@ function VideoCall(props) {
             })
         }
     }
-
+    /**
+     * Handles the RemoveStream event (deprecated now)
+     * @param {*} targetID User who caused the event
+     * @returns event to handle the RemoveStream event
+     */    
     function handleRemoveStreamEvent(targetID) {
         return event => {
             myStreamRef.current = event.stream
@@ -258,6 +312,11 @@ function VideoCall(props) {
         }
     }
 
+    /**
+     * Handles the IceCandidate event which occurs whenever the peer sends an ice-candidate for signalling
+     * @param {*} targetID User who sent the ICE-Candidate
+     * @returns event to handle the IceCandidate event
+     */    
     function handleIceCandidateEvent(targetID) {
         return event => {
             if (event.candidate) {
@@ -278,6 +337,20 @@ function VideoCall(props) {
 
     //      FUNCTIONS FOR HANDLING RTC SIGNALLING EVENTS        //
 
+    /**
+     * Utility to handle the Offer message received from a peer
+     * @param {*} message The Offer Message 
+     * 
+     * Sets the remoteDescription of the peer-connection to the pertaining to the sdp-offer made in the offer
+     * 
+     * Sends the answer in reply to the offer, speciying the Local Description
+     * and adding any Media Stream tracks for the user (if present)
+     * 
+     * incoming message (offer) Details:
+     *  - targetID: This should match the current userID for offer to be accepted
+     *  - senderID: Id of the user who sent the offer
+     *  - sdp: Session description of the sender (Local Description)
+     */
     function handleOfferMessage(message) {
         const { targetID, senderID, sdp } = message
 
@@ -327,6 +400,17 @@ function VideoCall(props) {
             .catch(error => console.log("Offer Handling, ", error))
     }
 
+    /**
+     * Utility to handle the Answer received from a peer in reply to the offer sent
+     * @param {*} message The Answer Message 
+     * 
+     *  Sets the remoteDescription of the peer-connection to the pertaining to the sdp-offer made in the answer
+     * 
+     *  incoming message(answer) Details:
+     *  - targetID: This should match the current userID for answer to be valid
+     *  - senderID: Id of the user who sent the answer
+     *  - sdp: Session description of the sender (Local Description)
+     */    
     function handleAnswerMessage(message) {
         const { targetID, senderID, sdp } = message
 
@@ -356,16 +440,25 @@ function VideoCall(props) {
     //      END OF FUNCTIONS FOR HANDLING RTC SIGNALLING EVENTS     //
 
 
-
     function leaveRoom() {
         window.location = routeHome()
     }
 
+    /**
+     * Utility function to copy the room_code of the current room
+     */
     function handleCopyJoiningInfo() {
         navigator.clipboard.writeText(props.RoomInfo.room_code)
     }
 
-    function downloadBlob(blob, name = `groot-recording(room-${props.RoomInfo.room_name})-${moment().format('lll')}.mp4`) {
+    /**
+     * Utility function to download the recorded media 
+     * @param {*} blob The collection of chunks (The recorded media)
+     * @param {*} name Name of the recording file to be stored locally 
+     * 
+     * starts the download of the media automatically
+     */
+    function downloadBlob(blob, name = `groot-recording(room - ${props.RoomInfo.room_name})-${moment().format('lll')}.mp4`) {
         if (
             window.navigator &&
             window.navigator.msSaveOrOpenBlob
@@ -387,12 +480,16 @@ function VideoCall(props) {
         );
 
         setTimeout(() => {
-            // For Firefox it is necessary to delay revoking the ObjectURL
             window.URL.revokeObjectURL(data);
             link.remove();
         }, 100);
     }
 
+    /**
+     * Handles the screen recording functionality
+     * - Creates a new media recording
+     * - Toggles the media recording state
+     */
     function handleScreenRecord() {
         if (!recording) {
             navigator.mediaDevices.getDisplayMedia({
@@ -456,7 +553,7 @@ function VideoCall(props) {
                     <Button
                         color="secondary"
                         onClick={handleScreenRecord}
-                        startIcon={!recording ? <AlbumIcon style={{ color: "green" }} /> : <AlbumIcon style={{ color: "red" }} />}
+                        startIcon={!recording ? <AlbumIcon style={{ color: "" }} /> : <AlbumIcon className={classes.blinking} style={{ color: "red" }} />}
                         title={!recording ? "Start Recording" : "Stop Recording"}
                     />
                     <Button

@@ -8,7 +8,9 @@ import {
     Avatar,
     CardContent,
 } from "@material-ui/core"
+import { Component } from "react";
 
+// CSS for the Videos Component
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -32,7 +34,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-
+/**
+ * The videos component, where all the videos of the video-call are rendered
+ * @param {*} props UserStreams, RoomInfo, UserInfo
+ * @returns {Component} The Videos Component
+ */
 function Videos(props) {
     const classes = useStyles();
 

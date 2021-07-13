@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: "grid",
         gridTemplateColumns: "2fr 5fr 2fr",
-        paddingLeft:"5rem"
+        paddingLeft: "5rem"
     },
     controls: {
         display: "flex",
@@ -38,7 +38,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default function Joining(props) {
+/**
+ * The Joining Component where the user can Create and Join Rooms
+ * @returns the Joining Component
+ */
+export default function Joining() {
     const classes = useStyles()
 
     const RoomInfo = useSelector(state => state.roomInfo)
@@ -59,38 +63,45 @@ export default function Joining(props) {
         }
     }, [RoomInfo])
 
-
+    // opens the room create dialog box
     const handleCreateDialogOpen = () => {
         setOpenCreate(true)
     }
 
+    // sets the roomName to the entered value
     const handleRoomNameChange = (e) => {
         setRoomName(e.target.value)
     }
 
+    // closes the create room dialog and resets the roomName
     const handleCreateDialogClose = (box) => {
         setOpenCreate(false)
         setRoomName('')
     }
 
+    // creates a new Room and the redirects to the given room
     const handleRoomCreate = () => {
         dispatch(createRoom(roomName))
         handleCreateDialogClose()
     }
 
+    // opens the room join dialog box
     const handleJoinDialogOpen = () => {
         setOpenJoin(true)
     }
 
+    // sets the roomCode to the entered value
     const handleRoomCodeChange = (e) => {
         setRoomCode(e.target.value)
     }
 
+    // closes the join room dialog and resets the roomCode        
     const handleJoinDialogClose = (box) => {
         setOpenJoin(false)
         setRoomCode('')
     }
 
+    // makes the user join an existing room and then redirects the user to the given room
     const handleRoomJoin = () => {
         dispatch(joinRoom(roomCode))
         handleJoinDialogClose()
@@ -126,7 +137,7 @@ export default function Joining(props) {
                         aria-labelledby="form-dialog-title"
                     >
                         <DialogTitle id="form-dialog-title" >
-                            Create a new Room
+                            Create a New Room
                         </DialogTitle>
                         <DialogContent>
 
@@ -145,10 +156,10 @@ export default function Joining(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleCreateDialogClose} color="default">
+                            <Button onClick={handleCreateDialogClose} color="default" style={{ textTransform: "none" }}>
                                 Cancel
                             </Button>
-                            <Button onClick={handleRoomCreate} color="secondary">
+                            <Button onClick={handleRoomCreate} color="secondary" style={{ textTransform: "none" }}>
                                 Continue
                             </Button>
                         </DialogActions>
@@ -161,7 +172,7 @@ export default function Joining(props) {
                         onClick={handleJoinDialogOpen}
                         color="secondary"
                         style={{
-                            textTransform:'none'
+                            textTransform: 'none'
                         }}
                     >
                         Join Room
@@ -193,10 +204,10 @@ export default function Joining(props) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleJoinDialogClose} color="default">
+                            <Button onClick={handleJoinDialogClose} color="default" style={{ textTransform: "none" }}>
                                 Cancel
                             </Button>
-                            <Button onClick={handleRoomJoin} color="secondary">
+                            <Button onClick={handleRoomJoin} color="secondary" style={{ textTransform: "none" }}>
                                 Continue
                             </Button>
                         </DialogActions>
@@ -206,9 +217,9 @@ export default function Joining(props) {
                     <Card
                         className={classes.card}
                         style={{
-                            display:"flex",
-                            justifyContent:"center",
-                            alignItems:"center",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                             backgroundColor: "black"
                         }}
                     >

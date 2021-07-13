@@ -7,7 +7,6 @@ import { useEffect } from "react"
 import Button from '@material-ui/core/Button'
 import {
     makeStyles,
-    createMuiTheme,
     CssBaseline,
     Grid,
     Paper,
@@ -15,21 +14,13 @@ import {
     CardContent,
     CardMedia,
 } from "@material-ui/core"
-import { ThemeProvider } from "@material-ui/styles";
 
 import GitHubIcon from '@material-ui/icons/GitHub'
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 
 import groot_logo from "./media/groot_landing_logo.png"
 
-const handleGithubLogin = () => {
-    window.location = githubAuthRedirect(cookie.load('stateToken'))
-}
-
-const handleGoogleLogin = () => {
-    window.location = googleAuthRedirect(cookie.load('stateToken'))
-}
-
+// CSS for the Login Component
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "92.25vh",
@@ -66,10 +57,28 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+const handleGithubLogin = () => {
+    window.location = githubAuthRedirect(cookie.load('stateToken'))
+}
 
+const handleGoogleLogin = () => {
+    window.location = googleAuthRedirect(cookie.load('stateToken'))
+}
+
+/**
+ * The Login/Landing Page of the app
+ * @returns {Component} the Login Component
+ * 
+ * Contains the UI and logic for logging via Google and Github
+ */
 export default function Login() {
     const classes = useStyles()
 
+    /*
+        Here we store a stateToken and send the same to the auth provider (Github / Google)
+        The stateToken is parsed from the response received and cross-verified with this 
+        This is done to ensure safety and avoid intermediate data piracy
+    */
     useEffect(() => {
         cookie.remove('stateToken')
         cookie.save('stateToken', randomstring.generate({ charset: 'alphabetic' }))
