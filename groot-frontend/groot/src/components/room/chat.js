@@ -20,7 +20,7 @@ const moment = require("moment")
 // CSS for the Chat Component
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: "85.25vh",
+        height: "87.25vh",
         marginRight: '1rem',
         paddingBottom: "1rem"
     },

@@ -5,6 +5,22 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 class User(AbstractUser):
+    """
+        The User Model.
+        This contains all the Users of the app
+
+        Attributes:
+            - username : CharField 
+                - Username of the user (in case of google auth, this would contain the email)
+
+            - name : CharField
+                - The room code
+
+            - profile_pic: TextField
+                - URL of the profile pic of the user
+                - If not present, it takes the default profile pic URL          
+
+    """
 
     username = models.CharField(
         max_length=100,

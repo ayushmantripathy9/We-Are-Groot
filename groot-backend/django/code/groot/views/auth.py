@@ -18,7 +18,23 @@ from groot.serializers import UserGetSerializer, UserPostSerializer
 
 
 class AuthViewSet(viewsets.ModelViewSet):
+    """
+        This is the view that handles all the api requests pertaining to user authentication to the Groot App
 
+        Methods:
+            - verify( dict : request )
+                Checks user is logged in to the app or not
+
+            - googleLogin( dict: request )
+                Handles user login using Google OAuth
+
+            - githubLogin( dict : request )
+                Handles user login using Google OAuth        
+
+            - logout()
+                Logs out the user from the app
+    """
+    
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
 

@@ -4,7 +4,9 @@ from groot.models import Message
 from groot.serializers import UserGetSerializer
 
 class MessageSerializer(ModelSerializer):
-    
+    """
+        Serializer to serialize a single message in GET method
+    """
     sender = UserGetSerializer()
     
     class Meta:

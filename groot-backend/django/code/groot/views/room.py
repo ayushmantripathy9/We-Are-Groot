@@ -14,6 +14,28 @@ from groot.permissions import CanAccessRoom
 
 
 class RoomViewSet(viewsets.ModelViewSet):
+    """
+        This is the view that handles all the api requests pertaining to room creation and joining to the Groot App
+        The history of rooms of user is also handled by this view
+
+        Methods:
+            - perform_create( serializer : RoomPostSerializer  )
+                Invoked during creation of a new room
+                Generates a room_code and sends it to the frontend
+                Handles user addition to the participants_history of the room 
+
+            - join( dict: request )
+                Handles user joining the room
+                Checks for a room using the request's room_code and adds the user to that room
+                Sends the room_data to the user after validating the room_code
+                Handles user addition to the participants_history of the room 
+
+            - history( dict : request )
+                Used for sending the user data pertaining to a past room that the user was present in 
+                Generates a list of rooms of the user using the RoomHistorySerializer      
+
+    """
+
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
             return RoomPostSerializer

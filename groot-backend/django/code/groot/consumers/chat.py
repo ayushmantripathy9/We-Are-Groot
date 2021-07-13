@@ -2,13 +2,36 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+
 from groot.consumers.messageTypes import chat_events
-
 from groot.models import Message, Room
-
-from groot.serializers import UserGetSerializer, MessageGetSerializer
+from groot.serializers import MessageGetSerializer
 
 class ChatConsumer(WebsocketConsumer):
+    """
+        Consumer that handles all the web-socket messages pertaining to Room Chat
+        This consumer also handles the ws requests during room-history to send the room-chat history to the frontend
+
+        Methods:
+            - connect()
+                This is invoked when a new user connects to the chat web-socket, on joining the room
+                It sends the user the past messages sent in the room-chat before the user joined
+            
+            - disconnect( string : code )
+                This method is invoked when a user leaves the room and thus disconnects from the room's chat web-socket
+                When the room selection is changed in the Room History page, then also this method is invoked
+            
+            - receive( stringified_json : text_data )
+                Whenever a user sends a message to the web-socket, it invokes this method
+                For the chat ws, this method on receiving any message from the user, sends the message as a burst to all the users in the room
+                Thus, all new messages sent in the Room Chat once the user has joined are handled by the receive() method
+            
+            - send_message_to_all( dict : event)
+                This is a utility method of the class used to send a burst message in the room
+                (Sends message to all users in the room)
+                
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__()
 

@@ -4,6 +4,24 @@ from django.conf import settings
 from groot.models import Room
 
 class Message(models.Model):
+    """
+        The Message Model.
+        This represents a message that was sent in a room.
+
+        Attributes:
+            - room : ForeignKey 
+                - The room in which the message was sent
+
+            - sender : ForeignKey
+                - User who sent the message
+
+            - content: CharField
+                - The message content
+
+            - time_sent: DateTimeField
+                - The sending time of the message
+
+    """
 
     room = models.ForeignKey(
         Room,

@@ -2,8 +2,10 @@ from django.db.models import fields
 from rest_framework.serializers import ModelSerializer
 from groot.models import User
 
-# the UserGetSerializer to be used for GET requests
 class UserGetSerializer(ModelSerializer):
+    """
+        The User Serializer to be used for GET requests
+    """
     class Meta:
 
         model = User
@@ -24,9 +26,10 @@ class UserGetSerializer(ModelSerializer):
             'email'            
         ]
 
-
-# the UserPostSerializer to be used for POST requests 
 class UserPostSerializer(ModelSerializer):
+    """
+        The User Serializer to be used for POST requests
+    """
     class Meta:
 
         model = User
