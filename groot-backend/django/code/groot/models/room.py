@@ -3,8 +3,28 @@ from django.conf import settings
 
 class Room(models.Model):
     """
-        This is the Room Model.
-        This would contain the rooms created by users for interaction
+        The Room Model.
+        This would contain the rooms created by users for interaction.
+
+        Attributes:
+            - room_name : CharField 
+                - The name of the room
+
+            - room_code : ForeignKey
+                - The room code
+
+            - participants: ManyToManyField
+                - Participants (users) currently present in the room
+
+            - participants_history: ManyToManyField
+                - Any participant(user) that ever attended the room
+
+            - start_time: DateTimeField
+                - The creation time of the room
+
+            - end_time: DateTimeField
+                - The end time of the room            
+
     """
 
     # stores the name of the rooom
