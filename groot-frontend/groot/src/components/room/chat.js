@@ -17,6 +17,7 @@ import { CssBaseline } from "@material-ui/core"
 
 const moment = require("moment")
 
+// CSS for the Chat Component
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "85.25vh",
@@ -101,19 +102,22 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }))
-export default function Chat(props) {
+/**
+ * The Chat Component where the room chat is held
+ * @returns The complete Chat Component
+ */
+export default function Chat() {
     const RoomInfo = useSelector(state => state.roomInfo)
     const classes = useStyles()
 
-    const chatWebSocket = useRef()
+    const chatWebSocket = useRef()                          // handles all the Chat WS messages
     const [chatMessages, setChatMessages] = useState([])
     const [inputMessage, setInputMessage] = useState('')
 
-    const messagesEndRef = useRef(null)
+    const messagesEndRef = useRef(null)     // Utility ref to which the Scroll to Bottom points to
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-
 
     useEffect(() => {
         scrollToBottom()
@@ -133,16 +137,14 @@ export default function Chat(props) {
 
     }, [])
 
+    // every time a new chat message is found, we scroll to the bottom of chat component
     useEffect(() => {
         scrollToBottom()
-        console.log("Chat Messages: ", chatMessages)
     }, [chatMessages])
 
     function handleWebSocketMessage(message) {
         const type = message.type
         const data = message.data
-
-        console.log("Type: ", type, " \nData: ", data)
 
         switch (type) {
             case MESSAGES_SENT_BEFORE:
@@ -170,7 +172,6 @@ export default function Chat(props) {
     }
 
     function sendMessageToAll(message) {
-        console.log("Sending this message: ", message)
         setInputMessage('')
         sendWebSocketMessage({
             content: message
