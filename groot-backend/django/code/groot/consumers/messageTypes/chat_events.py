@@ -1,3 +1,5 @@
+# These are the events that occur while handling chat in a room
+
 MESSAGES_SENT_BEFORE = 'MESSAGES_SENT_BEFORE'
 GET_MESSAGES_SENT_BEFORE = 'GET_MESSAGES_SENT_BEFORE'
 NEW_MESSAGE = 'NEW_MESSAGE'

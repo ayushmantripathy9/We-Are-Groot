@@ -9,6 +9,30 @@ from groot.models import Room
 from groot.serializers import UserGetSerializer
 
 class RoomConsumer(WebsocketConsumer):
+    """
+        Consumer that handles all the web-socket messages pertaining to Room
+        It handles events such as USER_JOINED, USER_LEFT and ROOM_PARTICIPANTS
+
+        Methods:
+            - connect()
+                This is invoked when a new user connects to the chat web-socket, on joining the room
+                It sends the user, all the room participants currently in the room
+                This also sends a burst message to everyone in the room, that a new user has joined
+            
+            - disconnect( string : code )
+                This method is invoked when a user leaves the room and thus disconnects from the room web-socket
+                It also notifies every user in the room via a burst event that the user has left the meeting
+            
+            - receive( stringified_json : text_data )
+                Whenever a user sends a message to the web-socket, it invokes this method
+                For the room ws, this method on receiving any message from the user, sends the message as a burst to all the users in the room
+                This is just a utility method present in the Room Consumer
+            
+            - send_message_to_all( dict : event)
+                This is a utility method of the class used to send a burst message in the room
+                (Sends message to all users in the room)
+                
+    """
     def __init__(self, *args, **kwargs):
         super().__init__()
 

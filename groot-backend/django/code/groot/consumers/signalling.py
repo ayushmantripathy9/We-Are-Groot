@@ -10,6 +10,37 @@ from groot.serializers import UserGetSerializer
 
 
 class SignallingConsumer(WebsocketConsumer):
+    """
+        Consumer that handles all the web-socket messages pertaining to Video Call Signalling using WebRTC
+        It handles events such as CALL_CONNECTED, PARTICIPANT_LEFT and signalling events such as OFFER, ANSWER, ICE_CANDIDATE
+        
+        Methods:
+            - connect()
+                This is invoked when a new user connects to the signalling web-socket, on joining the room
+                It sends the user who joined, a message containing all the room participants currently in the room
+            
+            - disconnect( string : code )
+                This method is invoked when a user leaves the room and thus disconnects from the signalling web-socket
+                It also notifies every user in the room via a burst event that the user has left the meeting in order to update the participants list
+            
+            - receive( stringified_json : text_data )
+                Whenever a user sends a signalling message to the web-socket, it invokes this method
+                For the signalling ws, this method on receiving any message from the user, sends the message in two ways:
+                    - If the message_type is in "specific_user_messages":
+                        The message is sent to a specific user
+                        Events: OFFER, ANSWER, ICE_CANDIDATE trigger this
+                    - Else:
+                        The message is sent as a burst message to all users in the room
+                        Event: PARTICIPANT_LEFT
+            
+            - send_message_to_all( dict : event)
+                This is the utility method of the class used to send a burst message in the room
+                (Sends message to all users in the room)
+
+            - send_message_to_user( dict : event)
+                This is the utility method of the class used to send the message to a specific user of the room
+
+    """
     def __init__(self, *args, **kwargs):
         super().__init__()
 
